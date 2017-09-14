@@ -8,6 +8,9 @@ repositories {
 }
 
 apply plugin: 'com.android.application'
+apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-kapt'
+apply plugin: 'kotlin-android-extensions'
 
 androidGitVersion {
     format = '%commit%'
@@ -87,10 +90,16 @@ android {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
     }
+
+    sourceSets {
+        main.java.srcDirs += 'src/main/kotlin'
+    }
 }
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
+
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jre8:$versions.kotlin"
 
     // Module dependencies
     implementation project(':data')
@@ -101,17 +110,17 @@ dependencies {
 
     // UI libs
     implementation "com.android.support:appcompat-v7:$versions.supportLibs"
-    implementation "com.jakewharton:butterknife:$versions.butterknife"
-    annotationProcessor "com.jakewharton:butterknife-compiler:$versions.butterknife"
 
     // Reactive
     implementation "io.reactivex.rxjava2:rxjava:$versions.rxJava2"
+    implementation "io.reactivex.rxjava2:rxkotlin:$versions.rxKotlin"
     implementation "io.reactivex.rxjava2:rxandroid:$versions.rxAndroid"
     implementation "com.jakewharton.rxbinding2:rxbinding:$versions.rxJava2Bindings"
+    implementation "com.jakewharton.rxbinding2:rxbinding-kotlin:$versions.rxJava2Bindings"
     implementation "com.jakewharton.rxrelay2:rxrelay:$versions.rxRelay2"
     implementation "android.arch.lifecycle:runtime:$versions.lifecycle"
     implementation "android.arch.lifecycle:extensions:$versions.lifecycle"
-    annotationProcessor "android.arch.lifecycle:compiler:$versions.lifecycle"
+    kapt "android.arch.lifecycle:compiler:$versions.lifecycle"
 
     // Auth
 
@@ -121,8 +130,7 @@ dependencies {
 
     // Others
     implementation "com.google.dagger:dagger:$versions.dagger"
-    annotationProcessor "com.google.dagger:dagger-compiler:$versions.dagger"
-    annotationProcessor "com.google.auto.value:auto-value:$versions.autoValue"
+    kapt "com.google.dagger:dagger-compiler:$versions.dagger"
 
     // Debugging & Inspecting
     debugImplementation "com.squareup.leakcanary:leakcanary-android:$versions.leakcanary"
