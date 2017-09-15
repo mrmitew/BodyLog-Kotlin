@@ -16,12 +16,18 @@ import javax.inject.Inject
 class LastUpdatedPresenter
 @Inject constructor(private val loadProfileInteractor: LoadProfileInteractor,
                     private val profileResultStateRelay: BehaviorRelay<ResultState>) :
-        DetachableMviPresenter<LastUpdatedView, LastUpdatedTextState>(LastUpdatedView.Empty()) {
+        DetachableMviPresenter<LastUpdatedView, LastUpdatedTextState>(emptyView) {
+
+    companion object {
+        val emptyView = LastUpdatedView.NoOp()
+    }
+
+    override fun getEmptyView(): LastUpdatedView = emptyView
 
     override fun initialState(): LastUpdatedTextState = LastUpdatedTextState.Factory.idle()
 
     override fun viewIntents(): Observable<UIIntent> =
-            if (view != null) view!!.getProfileLastUpdatedIntent().cast(UIIntent::class.java) else Observable.empty<UIIntent>()
+            view.getProfileLastUpdatedIntent().cast(UIIntent::class.java)
 
     override fun bindInternalIntents() {
         super.bindInternalIntents()
@@ -37,20 +43,20 @@ class LastUpdatedPresenter
     override fun createViewState(previousState: LastUpdatedTextState, resultState: ResultState): LastUpdatedTextState {
         when (resultState) {
             is LoadProfileInteractor.State ->
-                when {
-                    resultState.isInProgress -> // We are not going to indicate we are currently fetching new data,
+                return when (resultState) {
+                    is LoadProfileInteractor.State.InProgress -> // We are not going to indicate we are currently fetching new data,
                         // nor will replace the old one with something, but we'll just clear the error field (if there was one)
-                        return if (previousState.error !== StateError.Empty.INSTANCE)
+                        if (previousState.error !== StateError.Empty.INSTANCE)
                             previousState.copy(error = StateError.Empty.INSTANCE)
                         else
                             previousState
 
                     // No error? Then, just emit the old state. No view state changes needed to be done here.
-                    resultState.isSuccessful -> return previousState.copy(
+                    is LoadProfileInteractor.State.Successful -> return previousState.copy(
                             lastUpdated = LastUpdatedTextState.Factory.DATE_FORMAT.format(resultState.profile.timestamp),
                             error = StateError.Empty.INSTANCE)
 
-                    resultState.error !is StateError.Empty -> return previousState.copy(
+                    is LoadProfileInteractor.State.Error -> return previousState.copy(
                             lastUpdated = LastUpdatedTextState.Factory.DEFAULT_VALUE,
                             error = resultState.error)
                 }

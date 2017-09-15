@@ -21,12 +21,16 @@ class ProfileEditPresenter
                     private val saveProfileInteractor: SaveProfileInteractor,
                     private val checkRequiredFieldsInteractor: CheckRequiredFieldsInteractor,
                     private val profileResultStateRelay: BehaviorRelay<ResultState>)
-    : DetachableMviPresenter<ProfileEditView, ProfileEditState>(ProfileEditView.Empty()) {
+    : DetachableMviPresenter<ProfileEditView, ProfileEditState>(emptyView) {
 
-    override fun viewIntents(): Observable<UIIntent> =
-            if (view != null) Observable.merge(view!!.getRequiredFieldsFilledInIntent(),
-                    view!!.getSaveIntent(), view!!.getLoadProfileIntent())
-            else Observable.empty()
+    companion object {
+        val emptyView = ProfileEditView.NoOp()
+    }
+
+    override fun getEmptyView(): ProfileEditView = emptyView
+
+    override fun viewIntents(): Observable<UIIntent> = Observable.merge(view.getRequiredFieldsFilledInIntent(),
+            view.getSaveIntent(), view.getLoadProfileIntent())
 
     override fun initialState(): ProfileEditState = ProfileEditState.Factory.idle()
 
@@ -48,40 +52,42 @@ class ProfileEditPresenter
     override fun createViewState(previousState: ProfileEditState, resultState: ResultState): ProfileEditState {
         when (resultState) {
             is LoadProfileInteractor.State ->
-                when {
-                    resultState.isInProgress -> return previousState.copy(
+                return when (resultState) {
+                    is LoadProfileInteractor.State.InProgress -> previousState.copy(
                             isInProgress = true,
                             isLoadSuccessful = false,
                             loadError = StateError.Empty.INSTANCE)
-                    resultState.isSuccessful -> return previousState.copy(
+
+                    is LoadProfileInteractor.State.Successful -> previousState.copy(
+                            profile = resultState.profile,
                             isInProgress = false,
-                            isLoadSuccessful = true,
-                            profile = resultState.profile)
-                    resultState.error !is StateError.Empty -> return previousState.copy(
+                            isLoadSuccessful = true)
+
+                    is LoadProfileInteractor.State.Error -> previousState.copy(
                             isInProgress = false,
                             isLoadSuccessful = false,
                             loadError = resultState.error)
                 }
             is SaveProfileInteractor.State ->
-                when {
-                    resultState.isInProgress -> return previousState.copy(
+                return when (resultState) {
+                    is SaveProfileInteractor.State.InProgress -> previousState.copy(
                             isInProgress = true,
                             isSaveSuccessful = false,
                             saveError = StateError.Empty.INSTANCE)
-                    resultState.isSuccessful -> return previousState.copy(
+                    is SaveProfileInteractor.State.Successful -> previousState.copy(
                             isInProgress = false,
                             isSaveSuccessful = true)
-                    resultState.error !is StateError.Empty -> return previousState.copy(
+                    is SaveProfileInteractor.State.Error -> previousState.copy(
                             isInProgress = false,
                             isSaveSuccessful = false,
                             saveError = resultState.error)
                 }
             is CheckRequiredFieldsInteractor.State ->
-                when {
-                    resultState.isSuccessful -> return previousState.copy(
+                return when (resultState) {
+                    is CheckRequiredFieldsInteractor.State.Successful -> previousState.copy(
                             requiredFieldsFilledIn = true,
                             requiredFieldsError = StateError.Empty.INSTANCE)
-                    resultState.error !is StateError.Empty -> return previousState.copy(
+                    is CheckRequiredFieldsInteractor.State.Error -> previousState.copy(
                             requiredFieldsFilledIn = false,
                             requiredFieldsError = resultState.error)
                 }
