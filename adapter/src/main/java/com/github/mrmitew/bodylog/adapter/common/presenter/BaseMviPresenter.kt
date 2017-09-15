@@ -4,6 +4,7 @@ import com.github.mrmitew.bodylog.adapter.common.UiState
 import com.github.mrmitew.bodylog.adapter.common.model.ResultState
 import com.github.mrmitew.bodylog.adapter.common.model.UIIntent
 import com.github.mrmitew.bodylog.adapter.common.view.BaseView
+import com.github.mrmitew.bodylog.adapter.common.view.NoOpView
 import io.reactivex.Observable
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
@@ -12,7 +13,7 @@ abstract class BaseMviPresenter<V : BaseView<S>, S : UiState>(
         /**
          * View interface
          */
-        protected var view: V?) : BasePresenter, Disposable {
+        protected var view: V) : BasePresenter, Disposable {
 
     /**
      * Have the model gateways been init already
@@ -48,6 +49,7 @@ abstract class BaseMviPresenter<V : BaseView<S>, S : UiState>(
 
     override fun bindIntents() {
         check(!isDisposed)
+        check(view !is NoOpView)
 
         if (!isInit) {
             bindInternalIntents()
@@ -55,7 +57,7 @@ abstract class BaseMviPresenter<V : BaseView<S>, S : UiState>(
         }
 
         viewGateways.add(reduce(viewIntents())
-                .subscribe({ s -> view?.render(s) },
+                .subscribe({ s -> view.render(s) },
                         { t: Throwable -> throw RuntimeException(t) }))
     }
 
@@ -79,7 +81,7 @@ abstract class BaseMviPresenter<V : BaseView<S>, S : UiState>(
                 .scan<S>(if (lastState == null) initialState() else lastState, { previousState, resultState -> createViewState(previousState, resultState) })
                 .distinctUntilChanged()
                 .doOnNext { state -> lastState = state }
-                .doOnNext { state -> println("[RENDER] " + state) }
+                .doOnNext { println("[RENDER] $it") }
     }
 
 }

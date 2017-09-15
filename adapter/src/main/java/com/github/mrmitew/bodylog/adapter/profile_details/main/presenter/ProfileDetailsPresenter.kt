@@ -23,14 +23,18 @@ class ProfileDetailsPresenter @Inject constructor(
          * will be emitted as soon as the View attaches once again.
          */
         private val profileResultStateRelay: BehaviorRelay<ResultState>)
-    : DetachableMviPresenter<ProfileDetailsView, ProfileDetailsState>(ProfileDetailsView.Empty()) {
+    : DetachableMviPresenter<ProfileDetailsView, ProfileDetailsState>(emptyView) {
 
+    companion object {
+        val emptyView = ProfileDetailsView.NoOp()
+    }
+
+    override fun getEmptyView(): ProfileDetailsView = emptyView
 
     override fun initialState(): ProfileDetailsState = ProfileDetailsState.Factory.inProgress()
 
-    // FIXME: Ugh... no comment.
     override fun viewIntents(): Observable<UIIntent> =
-            if (view != null) view!!.getLoadProfileIntent().cast(UIIntent::class.java) else Observable.empty<UIIntent>()
+            view.getLoadProfileIntent().cast(UIIntent::class.java)
 
     override fun bindInternalIntents() {
         super.bindInternalIntents()
@@ -46,21 +50,24 @@ class ProfileDetailsPresenter @Inject constructor(
     override fun createViewState(previousState: ProfileDetailsState, resultState: ResultState): ProfileDetailsState {
         when (resultState) {
             is LoadProfileInteractor.State ->
-                when {
-                    resultState.isInProgress -> return previousState.copy(
-                            inProgress = true,
-                            loadSuccessful = false,
-                            loadError = StateError.Empty.INSTANCE)
+                return when (resultState) {
+                    is LoadProfileInteractor.State.InProgress ->
+                        previousState.copy(
+                                inProgress = true,
+                                loadSuccessful = false,
+                                loadError = StateError.Empty.INSTANCE)
 
-                    resultState.isSuccessful -> return previousState.copy(
-                            profile = resultState.profile,
-                            inProgress = false,
-                            loadSuccessful = true)
+                    is LoadProfileInteractor.State.Successful ->
+                        previousState.copy(
+                                profile = resultState.profile,
+                                inProgress = false,
+                                loadSuccessful = true)
 
-                    resultState.error !is StateError.Empty -> return previousState.copy(
-                            inProgress = false,
-                            loadSuccessful = false,
-                            loadError = resultState.error)
+                    is LoadProfileInteractor.State.Error ->
+                        previousState.copy(
+                                inProgress = false,
+                                loadSuccessful = false,
+                                loadError = resultState.error)
                 }
         }
 

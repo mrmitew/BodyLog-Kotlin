@@ -11,7 +11,9 @@ abstract class DetachableMviPresenter<V : BaseView<S>, S : UiState> protected co
     }
 
     override fun detachView() {
-        this.view = null
+        this.view = getEmptyView()
         unbindIntents()
     }
+
+    abstract fun getEmptyView(): V
 }
