@@ -29,7 +29,7 @@ class LoadProfileInteractorTest {
     }
 
     @Test
-    fun shouldReturnInProgressState_WhenEmissionStarts() {
+    fun shouldReturnInProgressState_WhenRepositoryObservableEmits() {
         //
         // Arrange
         //
