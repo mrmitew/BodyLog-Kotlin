@@ -91,3 +91,19 @@ ext.versions = [
         espresso            : '3.0.0',
         compileTesting      : '0.8',
 ]
+
+/**
+ * Workaround for running tests in Kotlin from Java module.
+ * See issue #64804587 - {@link "https://issuetracker.google.com/issues/64804587"}
+ * Fix is expected for 3.0.0-beta7
+ *
+ * TODO: Remove the following code when Gradle is fixed
+ */
+subprojects { subproject ->
+    afterEvaluate {
+        if (subproject.plugins.hasPlugin("kotlin") && subproject.plugins.hasPlugin("java-library")) {
+            subproject.kotlin.copyClassesToJavaOutput = true
+            subproject.jar.duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+        }
+    }
+}
