@@ -93,7 +93,7 @@ ext.versions = [
 ]
 
 /**
- * Workaround for running tests in Kotlin from Java module.
+ * Workaround for running tests, written in Kotlin
  * See issue #64804587 - {@link "https://issuetracker.google.com/issues/64804587"}
  * Fix is expected for 3.0.0-beta7
  *
@@ -101,7 +101,7 @@ ext.versions = [
  */
 subprojects { subproject ->
     afterEvaluate {
-        if (subproject.plugins.hasPlugin("kotlin") && subproject.plugins.hasPlugin("java-library")) {
+        if (subproject.plugins.hasPlugin("kotlin")) { // && subproject.plugins.hasPlugin("java-library")
             subproject.kotlin.copyClassesToJavaOutput = true
             subproject.jar.duplicatesStrategy = DuplicatesStrategy.EXCLUDE
         }
