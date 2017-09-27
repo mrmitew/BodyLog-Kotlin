@@ -76,7 +76,8 @@ class ProfileEditPresenter
                             saveError = StateError.Empty.INSTANCE)
                     is SaveProfileInteractor.State.Successful -> previousState.copy(
                             isInProgress = false,
-                            isSaveSuccessful = true)
+                            isSaveSuccessful = true,
+                            profile = resultState.profile)
                     is SaveProfileInteractor.State.Error -> previousState.copy(
                             isInProgress = false,
                             isSaveSuccessful = false,

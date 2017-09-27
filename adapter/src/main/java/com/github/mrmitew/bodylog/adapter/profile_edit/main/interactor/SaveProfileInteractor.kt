@@ -33,6 +33,7 @@ class SaveProfileInteractor @Inject constructor(private val threadExecutor: Thre
     internal fun getUseCaseObservable(profile: Profile): Observable<Profile> =
             repository.setProfile(profile)
                     .toObservable<Profile>()
+                    .startWith(profile)
 
     private fun buildUseCaseObservable(intent: SaveProfileIntent): Observable<Profile> =
             getUseCaseObservable(intent.profile)
