@@ -24,12 +24,9 @@ class LastUpdatedPresenterTest {
     @Mock private lateinit var mockRepository: Repository
     @Mock private lateinit var view: LastUpdatedView
     @Mock private lateinit var error: Throwable
-
     private lateinit var presenter: LastUpdatedPresenter
     private lateinit var loadProfileInteractor: LoadProfileInteractor
     private lateinit var profileResultStateRelay: BehaviorRelay<ResultState>
-
-    private lateinit var initialState: LastUpdatedTextState
 
     @Before
     fun setUp() {
@@ -40,12 +37,10 @@ class LastUpdatedPresenterTest {
 
         profileResultStateRelay = BehaviorRelay.create()
 
-        initialState = LastUpdatedTextState(lastUpdated = LastUpdatedTextState.Factory.DEFAULT_VALUE,
-                error = StateError.Empty.INSTANCE)
-
         presenter = spy(LastUpdatedPresenter(loadProfileInteractor = loadProfileInteractor,
                 profileResultStateRelay = profileResultStateRelay,
-                initialState = initialState))
+                initialState = LastUpdatedTextState(lastUpdated = LastUpdatedTextState.Factory.DEFAULT_VALUE,
+                        error = StateError.Empty.INSTANCE)))
 
 //        `when`(view.getProfileLastUpdatedIntent()).thenReturn(Observable.just(GetProfileLastUpdatedIntent()))
     }
