@@ -36,7 +36,7 @@ abstract class BaseMviPresenter<V : BaseView<S>, S : UiState>(
     protected val viewGateways: CompositeDisposable = CompositeDisposable()
 
     internal abstract fun createViewState(previousState: S, resultState: ResultState): S
-    protected abstract fun createResultStateObservable(uiIntentStream: Observable<UIIntent>): Observable<ResultState>
+    internal abstract fun createResultStateObservable(uiIntentStream: Observable<UIIntent>): Observable<ResultState>
     protected abstract fun viewIntents(): Observable<UIIntent>
     protected abstract val initialState: S
 

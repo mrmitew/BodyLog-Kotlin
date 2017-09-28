@@ -2,7 +2,9 @@ package com.github.mrmitew.bodylog.adapter.profile_details.last_updated.presente
 
 import com.github.mrmitew.bodylog.adapter.common.model.ResultState
 import com.github.mrmitew.bodylog.adapter.common.model.StateError
+import com.github.mrmitew.bodylog.adapter.common.model.UIIntent
 import com.github.mrmitew.bodylog.adapter.profile_common.interactor.LoadProfileInteractor
+import com.github.mrmitew.bodylog.adapter.profile_details.last_updated.intent.GetProfileLastUpdatedIntent
 import com.github.mrmitew.bodylog.adapter.profile_details.last_updated.model.LastUpdatedTextState
 import com.github.mrmitew.bodylog.adapter.profile_details.last_updated.view.LastUpdatedView
 import com.github.mrmitew.bodylog.domain.executor.ImmediateJobExecutor
@@ -10,13 +12,14 @@ import com.github.mrmitew.bodylog.domain.executor.TestPostExecutionThread
 import com.github.mrmitew.bodylog.domain.repository.Repository
 import com.github.mrmitew.bodylog.domain.repository.entity.Profile
 import com.jakewharton.rxrelay2.BehaviorRelay
+import io.reactivex.Observable
 import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.mockito.Mock
+import org.mockito.Mockito.`when`
 import org.mockito.Mockito.mock
-import org.mockito.Mockito.spy
 import org.mockito.junit.MockitoJUnitRunner
 
 @RunWith(MockitoJUnitRunner::class)
@@ -37,12 +40,69 @@ class LastUpdatedPresenterTest {
 
         profileResultStateRelay = BehaviorRelay.create()
 
-        presenter = spy(LastUpdatedPresenter(loadProfileInteractor = loadProfileInteractor,
+        presenter = LastUpdatedPresenter(loadProfileInteractor = loadProfileInteractor,
                 profileResultStateRelay = profileResultStateRelay,
                 initialState = LastUpdatedTextState(lastUpdated = LastUpdatedTextState.Factory.DEFAULT_VALUE,
-                        error = StateError.Empty.INSTANCE)))
+                        error = StateError.Empty.INSTANCE))
+    }
 
-//        `when`(view.getProfileLastUpdatedIntent()).thenReturn(Observable.just(GetProfileLastUpdatedIntent()))
+    @Test
+    fun shouldReturnProfileResultState_ForGetProfileLastUpdatedIntent() {
+        // Arrange
+        val expectedProfile = mock(Profile::class.java)
+        val loadProfileIntent = Observable.just(GetProfileLastUpdatedIntent()).cast(UIIntent::class.java)
+
+        // Act
+        val resultStateObservable = presenter.createResultStateObservable(loadProfileIntent)
+        // Emit a result state, just like as if it was from the repository
+        profileResultStateRelay.accept(LoadProfileInteractor.State.Successful(expectedProfile))
+        val resultStream = resultStateObservable.test()
+
+        // Assert
+        assertTrue(resultStream.valueCount() == 1)
+        val resultState = resultStream.values()[0]
+        when (resultState) {
+            is LoadProfileInteractor.State.Successful -> assertTrue(resultState.profile == expectedProfile)
+            else -> throw RuntimeException("Expected a successful state")
+        }
+    }
+
+    // Integration between LoadProfileInteractor and presenter
+    @Test
+    fun shouldGetProfileResultState_WhenProfileIntentFires() {
+        //
+        // Arrange
+        //
+        val expectedProfile = mock(Profile::class.java)
+        val loadProfileIntent = Observable.just(GetProfileLastUpdatedIntent()).cast(UIIntent::class.java)
+
+        // Fire a view intent to load a profile
+        `when`(view.getProfileLastUpdatedIntent()).thenReturn(Observable.just(GetProfileLastUpdatedIntent()))
+
+        // Return a profile when the repository will be queried
+        `when`(loadProfileInteractor.getUseCaseObservable()).thenReturn(Observable.just(expectedProfile))
+
+        //
+        // Act
+        //
+        attachView()
+
+        val resultStateObservable = presenter.createResultStateObservable(loadProfileIntent)
+        val resultStream = resultStateObservable.test()
+
+        //
+        // Assert
+        //
+
+        assertTrue(resultStream.valueCount() == 1)
+        val resultState = resultStream.values()[0]
+        when (resultState) {
+            is LoadProfileInteractor.State.Successful -> assertTrue(resultState.profile == expectedProfile)
+            else -> throw RuntimeException("Expected a successful state")
+        }
+
+        // Clean up
+        detachView()
     }
 
     @Test
