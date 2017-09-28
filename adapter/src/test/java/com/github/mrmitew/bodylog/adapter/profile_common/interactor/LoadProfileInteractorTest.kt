@@ -54,6 +54,7 @@ class LoadProfileInteractorTest {
     fun shouldReturnSuccessfulState_WhenProfileIsRetrieved() {
         //
         // Arrange
+        //
         val profile = Profile(
                 name = "Test",
                 description = "Test",
@@ -155,8 +156,10 @@ class LoadProfileInteractorTest {
 
         // Second state should be "error"
         assertEquals(true, values[1] is LoadProfileInteractor.State.Error)
+        // Is the error we expect though?
+        assertEquals(true, (values[1] as LoadProfileInteractor.State.Error).error == expectedError)
 
-        // No errors should be emitted
+        // No stream errors should be emitted
         stateTestObserver.assertNoErrors()
     }
 }
