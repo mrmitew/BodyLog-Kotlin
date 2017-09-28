@@ -1,7 +1,7 @@
 package com.github.mrmitew.bodylog.framework.common.presenter
 
 import android.app.Application
-import com.github.mrmitew.bodylog.adapter.common.ViewState
+import com.github.mrmitew.bodylog.adapter.common.model.ViewState
 
 import com.github.mrmitew.bodylog.adapter.common.presenter.Bindable
 import com.github.mrmitew.bodylog.adapter.common.presenter.DetachableMviPresenter

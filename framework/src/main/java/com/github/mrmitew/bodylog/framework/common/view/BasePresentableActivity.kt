@@ -1,7 +1,7 @@
 package com.github.mrmitew.bodylog.framework.common.view
 
 import android.os.Bundle
-import com.github.mrmitew.bodylog.adapter.common.ViewState
+import com.github.mrmitew.bodylog.adapter.common.model.ViewState
 
 import com.github.mrmitew.bodylog.adapter.common.view.BaseView
 import com.github.mrmitew.bodylog.framework.common.presenter.BasePresenterHolder

@@ -4,7 +4,7 @@ import android.content.Context
 import android.support.v7.widget.AppCompatTextView
 import android.util.AttributeSet
 
-import com.github.mrmitew.bodylog.adapter.common.ViewState
+import com.github.mrmitew.bodylog.adapter.common.model.ViewState
 import com.github.mrmitew.bodylog.adapter.common.view.BaseView
 import com.github.mrmitew.bodylog.framework.common.presenter.BasePresenterHolder
 

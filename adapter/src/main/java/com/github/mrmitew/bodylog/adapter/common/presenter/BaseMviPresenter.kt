@@ -1,8 +1,8 @@
 package com.github.mrmitew.bodylog.adapter.common.presenter
 
-import com.github.mrmitew.bodylog.adapter.common.ViewState
 import com.github.mrmitew.bodylog.adapter.common.model.ResultState
 import com.github.mrmitew.bodylog.adapter.common.model.ViewIntent
+import com.github.mrmitew.bodylog.adapter.common.model.ViewState
 import com.github.mrmitew.bodylog.adapter.common.view.BaseView
 import com.github.mrmitew.bodylog.adapter.common.view.NoOpView
 import io.reactivex.Observable

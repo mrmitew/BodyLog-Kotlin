@@ -1,7 +1,7 @@
 package com.github.mrmitew.bodylog.adapter.profile_details.last_updated.model
 
-import com.github.mrmitew.bodylog.adapter.common.ViewState
 import com.github.mrmitew.bodylog.adapter.common.model.StateError
+import com.github.mrmitew.bodylog.adapter.common.model.ViewState
 import java.text.SimpleDateFormat
 import java.util.*
 
