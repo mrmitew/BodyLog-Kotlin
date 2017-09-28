@@ -18,7 +18,7 @@ import dagger.Subcomponent
 import javax.inject.Singleton
 
 @ActivityScope
-@Subcomponent(modules = arrayOf(ProfileEditActivityComponent.ProfileEditActivityModule::class))
+@Subcomponent(modules = arrayOf(ProfileEditActivityComponent.ComponentModule::class))
 interface ProfileEditActivityComponent : ActivityComponent<ProfileEditActivity> {
     @Singleton
     @Module
@@ -36,9 +36,9 @@ interface ProfileEditActivityComponent : ActivityComponent<ProfileEditActivity> 
     }
 
     @Subcomponent.Builder
-    interface Builder : ActivityComponentBuilder<ProfileEditActivityComponent.ProfileEditActivityModule, ProfileEditActivityComponent>
+    interface Builder : ActivityComponentBuilder<ProfileEditActivityComponent.ComponentModule, ProfileEditActivityComponent>
 
     @ActivityScope
     @Module
-    class ProfileEditActivityModule(activity: ProfileEditActivity) : ActivityModule<ProfileEditActivity>(activity)
+    class ComponentModule(activity: ProfileEditActivity) : ActivityModule<ProfileEditActivity>(activity)
 }

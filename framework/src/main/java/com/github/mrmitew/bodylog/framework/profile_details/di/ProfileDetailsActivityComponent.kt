@@ -19,7 +19,7 @@ import javax.inject.Named
 import javax.inject.Singleton
 
 @ActivityScope
-@Subcomponent(modules = arrayOf(ProfileDetailsActivityComponent.ProfileDetailsActivityModule::class))
+@Subcomponent(modules = arrayOf(ProfileDetailsActivityComponent.ComponentModule::class))
 interface ProfileDetailsActivityComponent : ActivityComponent<ProfileDetailsActivity> {
     @Singleton
     @Module
@@ -42,9 +42,9 @@ interface ProfileDetailsActivityComponent : ActivityComponent<ProfileDetailsActi
     }
 
     @Subcomponent.Builder
-    interface Builder : ActivityComponentBuilder<ProfileDetailsActivityModule, ProfileDetailsActivityComponent>
+    interface Builder : ActivityComponentBuilder<ComponentModule, ProfileDetailsActivityComponent>
 
     @ActivityScope
     @Module
-    class ProfileDetailsActivityModule(activity: ProfileDetailsActivity) : ActivityModule<ProfileDetailsActivity>(activity)
+    class ComponentModule(activity: ProfileDetailsActivity) : ActivityModule<ProfileDetailsActivity>(activity)
 }

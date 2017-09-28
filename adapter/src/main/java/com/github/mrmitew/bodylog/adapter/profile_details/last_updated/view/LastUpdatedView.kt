@@ -8,13 +8,13 @@ import com.github.mrmitew.bodylog.adapter.profile_details.last_updated.model.Las
 import io.reactivex.Observable
 
 interface LastUpdatedView : BaseView<LastUpdatedTextState> {
-    fun getProfileLastUpdatedIntent(): Observable<GetProfileLastUpdatedIntent>
+    fun profileLastUpdatedIntent(): Observable<GetProfileLastUpdatedIntent>
 
     class NoOp : LastUpdatedView, NoOpView {
         override fun render(state: LastUpdatedTextState) {
             // no-op
         }
 
-        override fun getProfileLastUpdatedIntent(): Observable<GetProfileLastUpdatedIntent> = Observable.empty()
+        override fun profileLastUpdatedIntent(): Observable<GetProfileLastUpdatedIntent> = Observable.empty()
     }
 }

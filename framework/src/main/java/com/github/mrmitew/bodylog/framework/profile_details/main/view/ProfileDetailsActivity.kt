@@ -24,16 +24,10 @@ import javax.inject.Inject
 class ProfileDetailsActivity : BasePresentableActivity<ProfileDetailsView, ProfileDetailsState>(), ProfileDetailsView {
     class PresenterHolder(application: Application) : BasePresenterHolder<ProfileDetailsView, ProfileDetailsState>(application) {
         @Inject override lateinit var presenter: ProfileDetailsPresenter
-
-        override fun injectMembers(injector: PresenterHolderInjector) {
-            injector.inject(this)
-        }
+        override fun injectMembers(injector: PresenterHolderInjector) = injector.inject(this)
     }
 
     override val view: ProfileDetailsView = this
-
-    override fun getLoadProfileIntent(): Observable<LoadProfileIntent> =
-            Observable.just(LoadProfileIntent())
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -41,16 +35,17 @@ class ProfileDetailsActivity : BasePresentableActivity<ProfileDetailsView, Profi
         setClickListeners()
     }
 
-    override fun injectMembers(hasActivitySubcomponentBuilders: HasActivitySubcomponentBuilders) {
-        (hasActivitySubcomponentBuilders.getActivityComponentBuilder(ProfileDetailsActivity::class.java) as ProfileDetailsActivityComponent.Builder)
-                .activityModule(ProfileDetailsActivityComponent.ProfileDetailsActivityModule(this))
-                .build()
-                .injectMembers(this)
-    }
+    override fun injectMembers(hasActivitySubcomponentBuilders: HasActivitySubcomponentBuilders) =
+            (hasActivitySubcomponentBuilders.getActivityComponentBuilder(ProfileDetailsActivity::class.java) as ProfileDetailsActivityComponent.Builder)
+                    .activityModule(ProfileDetailsActivityComponent.ComponentModule(this))
+                    .build()
+                    .injectMembers(this)
 
-    override fun injectPresenterHolder(): BasePresenterHolder<ProfileDetailsView, ProfileDetailsState> {
-        return ViewModelProviders.of(this).get(PresenterHolder::class.java)
-    }
+
+    override fun injectPresenterHolder(): BasePresenterHolder<ProfileDetailsView, ProfileDetailsState> =
+            ViewModelProviders.of(this).get(PresenterHolder::class.java)
+
+    override fun loadProfileIntent(): Observable<LoadProfileIntent> = Observable.just(LoadProfileIntent())
 
     override fun render(state: ProfileDetailsState) {
         val hasError = state.loadError !is StateError.Empty
@@ -80,11 +75,7 @@ class ProfileDetailsActivity : BasePresentableActivity<ProfileDetailsView, Profi
         tv_waist_size.text = profile.waistSize.toString()
     }
 
-    private fun setClickListeners() {
-        btn_edit.setOnClickListener { onEditRequest() }
-    }
+    private fun setClickListeners() = btn_edit.setOnClickListener { onEditRequest() }
 
-    private fun onEditRequest() {
-        startActivity(ProfileEditActivity.getCallingIntent(this))
-    }
+    private fun onEditRequest() = startActivity(ProfileEditActivity.getCallingIntent(this))
 }

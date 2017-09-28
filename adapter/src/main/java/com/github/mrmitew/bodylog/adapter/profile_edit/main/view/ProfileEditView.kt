@@ -9,16 +9,16 @@ import com.github.mrmitew.bodylog.adapter.profile_edit.main.model.ProfileEditSta
 import io.reactivex.Observable
 
 interface ProfileEditView : BaseView<ProfileEditState> {
-    fun getLoadProfileIntent(): Observable<LoadProfileIntent>
+    fun loadProfileIntent(): Observable<LoadProfileIntent>
 
-    fun getSaveIntent(): Observable<SaveProfileIntent>
+    fun saveIntent(): Observable<SaveProfileIntent>
 
-    fun getRequiredFieldsFilledInIntent(): Observable<CheckRequiredFieldsIntent>
+    fun requiredFieldsFilledInIntent(): Observable<CheckRequiredFieldsIntent>
 
     class NoOp : ProfileEditView, NoOpView {
-        override fun getLoadProfileIntent(): Observable<LoadProfileIntent> = Observable.empty()
-        override fun getSaveIntent(): Observable<SaveProfileIntent> = Observable.empty()
-        override fun getRequiredFieldsFilledInIntent(): Observable<CheckRequiredFieldsIntent> = Observable.empty()
+        override fun loadProfileIntent(): Observable<LoadProfileIntent> = Observable.empty()
+        override fun saveIntent(): Observable<SaveProfileIntent> = Observable.empty()
+        override fun requiredFieldsFilledInIntent(): Observable<CheckRequiredFieldsIntent> = Observable.empty()
         override fun render(state: ProfileEditState) {
             // no-op
         }

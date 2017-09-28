@@ -32,8 +32,8 @@ class ProfileEditPresenter
                     .doOnNext { println("[EDIT] [PROFILE MODEL] (${it.hashCode()} : $it") }
                     .subscribe(profileResultStateRelay))
 
-    override fun viewIntentStream(): Observable<ViewIntent> = Observable.merge(view.getRequiredFieldsFilledInIntent(),
-            view.getSaveIntent(), view.getLoadProfileIntent())
+    override fun viewIntentStream(): Observable<ViewIntent> = Observable.merge(view.requiredFieldsFilledInIntent(),
+            view.saveIntent(), view.loadProfileIntent())
 
     override fun resultStateStream(viewIntentStream: Observable<ViewIntent>): Observable<ResultState> =
             viewIntentStream.publish { shared ->

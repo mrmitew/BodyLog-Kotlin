@@ -28,7 +28,7 @@ class LastUpdatedPresenter
                     .subscribe(profileResultStateRelay))
 
     override fun viewIntentStream(): Observable<ViewIntent> =
-            view.getProfileLastUpdatedIntent().cast(ViewIntent::class.java)
+            view.profileLastUpdatedIntent().cast(ViewIntent::class.java)
 
     override fun resultStateStream(viewIntentStream: Observable<ViewIntent>): Observable<ResultState> =
             viewIntentStream.publish { shared ->

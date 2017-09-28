@@ -18,12 +18,8 @@ import javax.inject.Inject
 
 class LastUpdatedTextView : BasePresentableTextView<LastUpdatedView, LastUpdatedTextState>, LastUpdatedView {
     class PresenterHolder(application: Application) : BasePresenterHolder<LastUpdatedView, LastUpdatedTextState>(application) {
-        @Inject
-        override lateinit var presenter: LastUpdatedPresenter
-
-        override fun injectMembers(injector: PresenterHolderInjector) {
-            injector.inject(this)
-        }
+        @Inject override lateinit var presenter: LastUpdatedPresenter
+        override fun injectMembers(injector: PresenterHolderInjector) = injector.inject(this)
     }
 
     override val view: LastUpdatedView = this
@@ -34,11 +30,10 @@ class LastUpdatedTextView : BasePresentableTextView<LastUpdatedView, LastUpdated
 
     constructor(context: Context, attrs: AttributeSet, defStyleAttr: Int) : super(context, attrs, defStyleAttr)
 
-    override fun injectPresenterHolder(): PresenterHolder {
-        return ViewModelProviders.of(context as AppCompatActivity).get(PresenterHolder::class.java)
-    }
+    override fun injectPresenterHolder(): PresenterHolder =
+            ViewModelProviders.of(context as AppCompatActivity).get(PresenterHolder::class.java)
 
-    override fun getProfileLastUpdatedIntent(): Observable<GetProfileLastUpdatedIntent>
+    override fun profileLastUpdatedIntent(): Observable<GetProfileLastUpdatedIntent>
             = Observable.just(GetProfileLastUpdatedIntent())
 
     override fun render(state: LastUpdatedTextState) {

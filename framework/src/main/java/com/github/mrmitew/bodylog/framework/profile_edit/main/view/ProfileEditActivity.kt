@@ -30,16 +30,11 @@ import javax.inject.Inject
 class ProfileEditActivity : BasePresentableActivity<ProfileEditView, ProfileEditState>(), ProfileEditView {
     class PresenterHolder(application: Application) : BasePresenterHolder<ProfileEditView, ProfileEditState>(application) {
         @Inject override lateinit var presenter: ProfileEditPresenter
-
-        override fun injectMembers(injector: PresenterHolderInjector) {
-            injector.inject(this)
-        }
+        override fun injectMembers(injector: PresenterHolderInjector) = injector.inject(this)
     }
 
     companion object Factory {
-        fun getCallingIntent(context: Context): Intent {
-            return Intent(context, ProfileEditActivity::class.java)
-        }
+        fun getCallingIntent(context: Context): Intent = Intent(context, ProfileEditActivity::class.java)
     }
 
     override val view: ProfileEditView = this
@@ -71,21 +66,18 @@ class ProfileEditActivity : BasePresentableActivity<ProfileEditView, ProfileEdit
         }
     }
 
-    override fun injectPresenterHolder(): BasePresenterHolder<ProfileEditView, ProfileEditState> {
-        return ViewModelProviders.of(this).get(PresenterHolder::class.java)
-    }
+    override fun injectPresenterHolder(): BasePresenterHolder<ProfileEditView, ProfileEditState> =
+            ViewModelProviders.of(this).get(PresenterHolder::class.java)
 
-    override fun injectMembers(hasActivitySubcomponentBuilders: HasActivitySubcomponentBuilders) {
-        (hasActivitySubcomponentBuilders.getActivityComponentBuilder(ProfileEditActivity::class.java) as ProfileEditActivityComponent.Builder)
-                .activityModule(ProfileEditActivityComponent.ProfileEditActivityModule(this))
-                .build()
-                .injectMembers(this)
-    }
+    override fun injectMembers(hasActivitySubcomponentBuilders: HasActivitySubcomponentBuilders) =
+            (hasActivitySubcomponentBuilders.getActivityComponentBuilder(ProfileEditActivity::class.java) as ProfileEditActivityComponent.Builder)
+                    .activityModule(ProfileEditActivityComponent.ComponentModule(this))
+                    .build()
+                    .injectMembers(this)
 
-    override fun getLoadProfileIntent(): Observable<LoadProfileIntent> =
-            Observable.just(LoadProfileIntent())
+    override fun loadProfileIntent(): Observable<LoadProfileIntent> = Observable.just(LoadProfileIntent())
 
-    override fun getSaveIntent(): Observable<SaveProfileIntent> =
+    override fun saveIntent(): Observable<SaveProfileIntent> =
             btn_save.clicks()
                     .map {
                         SaveProfileIntent(Profile(
@@ -99,7 +91,7 @@ class ProfileEditActivity : BasePresentableActivity<ProfileEditView, ProfileEdit
                                 waistSize = et_waist_size.text.toString().toFloat()))
                     }
 
-    override fun getRequiredFieldsFilledInIntent(): Observable<CheckRequiredFieldsIntent> =
+    override fun requiredFieldsFilledInIntent(): Observable<CheckRequiredFieldsIntent> =
             Observable.combineLatest(
                     getNameIntent().map { name -> name.isNotEmpty() },
                     getDescriptionIntent().map { description -> description.isNotEmpty() },
@@ -108,17 +100,16 @@ class ProfileEditActivity : BasePresentableActivity<ProfileEditView, ProfileEdit
                     .map { CheckRequiredFieldsIntent(it) }
 
 
-    private fun getNameIntent(): Observable<String> {
-        return et_name.textChanges()
-                .skip(1)
-                .map { it.toString() }
-    }
+    private fun getNameIntent() =
+            et_name.textChanges()
+                    .skip(1)
+                    .map { it.toString() }
 
-    private fun getDescriptionIntent(): Observable<String> {
-        return et_description.textChanges()
-                .skip(1)
-                .map { it.toString() }
-    }
+
+    private fun getDescriptionIntent() =
+            et_description.textChanges()
+                    .skip(1)
+                    .map { it.toString() }
 
     private fun inflate(profile: Profile) {
         et_name.setText(profile.name)

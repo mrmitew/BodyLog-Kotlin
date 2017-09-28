@@ -83,7 +83,7 @@ class LastUpdatedPresenterTest {
         val viewIntentStream = Observable.just(GetProfileLastUpdatedIntent()).cast(ViewIntent::class.java)
 
         // Fire a view intent to load a profile
-        `when`(view.getProfileLastUpdatedIntent()).thenReturn(Observable.just(GetProfileLastUpdatedIntent()))
+        `when`(view.profileLastUpdatedIntent()).thenReturn(Observable.just(GetProfileLastUpdatedIntent()))
 
         // Return a profile when the repository will be queried
         `when`(loadProfileInteractor.getUseCaseObservable()).thenReturn(Observable.just(expectedProfile))

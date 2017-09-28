@@ -8,13 +8,13 @@ import com.github.mrmitew.bodylog.adapter.profile_details.main.model.ProfileDeta
 import io.reactivex.Observable
 
 interface ProfileDetailsView : BaseView<ProfileDetailsState> {
-    fun getLoadProfileIntent(): Observable<LoadProfileIntent>
+    fun loadProfileIntent(): Observable<LoadProfileIntent>
 
     class NoOp : ProfileDetailsView, NoOpView {
         override fun render(state: ProfileDetailsState) {
             // no-op
         }
 
-        override fun getLoadProfileIntent(): Observable<LoadProfileIntent> = Observable.empty()
+        override fun loadProfileIntent(): Observable<LoadProfileIntent> = Observable.empty()
     }
 }

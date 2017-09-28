@@ -35,7 +35,7 @@ class ProfileDetailsPresenter @Inject constructor(
                     .subscribe(profileResultStateRelay))
 
     override fun viewIntentStream(): Observable<ViewIntent> =
-            view.getLoadProfileIntent().cast(ViewIntent::class.java)
+            view.loadProfileIntent().cast(ViewIntent::class.java)
 
     override fun resultStateStream(viewIntentStream: Observable<ViewIntent>): Observable<ResultState> =
             viewIntentStream.publish { shared -> shared.ofType(LoadProfileIntent::class.java).flatMap { profileResultStateRelay } }
