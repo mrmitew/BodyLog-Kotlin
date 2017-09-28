@@ -1,7 +1,7 @@
 package com.github.mrmitew.bodylog.adapter.profile_edit.main.presenter
 
+import com.github.mrmitew.bodylog.adapter.common.model.Error
 import com.github.mrmitew.bodylog.adapter.common.model.ResultState
-import com.github.mrmitew.bodylog.adapter.common.model.StateError
 import com.github.mrmitew.bodylog.adapter.common.model.ViewIntent
 import com.github.mrmitew.bodylog.adapter.common.presenter.DetachableMviPresenter
 import com.github.mrmitew.bodylog.adapter.profile_common.intent.LoadProfileIntent
@@ -49,7 +49,7 @@ class ProfileEditPresenter
                     is LoadProfileInteractor.State.InProgress -> previousState.copy(
                             isInProgress = true,
                             isLoadSuccessful = false,
-                            loadError = StateError.Empty.INSTANCE)
+                            loadError = Error.Empty.INSTANCE)
 
                     is LoadProfileInteractor.State.Successful -> previousState.copy(
                             profile = resultState.profile,
@@ -66,7 +66,7 @@ class ProfileEditPresenter
                     is SaveProfileInteractor.State.InProgress -> previousState.copy(
                             isInProgress = true,
                             isSaveSuccessful = false,
-                            saveError = StateError.Empty.INSTANCE)
+                            saveError = Error.Empty.INSTANCE)
                     is SaveProfileInteractor.State.Successful -> previousState.copy(
                             isInProgress = false,
                             isSaveSuccessful = true,
@@ -80,7 +80,7 @@ class ProfileEditPresenter
                 return when (resultState) {
                     is CheckRequiredFieldsInteractor.State.Successful -> previousState.copy(
                             requiredFieldsFilledIn = true,
-                            requiredFieldsError = StateError.Empty.INSTANCE)
+                            requiredFieldsError = Error.Empty.INSTANCE)
                     is CheckRequiredFieldsInteractor.State.Error -> previousState.copy(
                             requiredFieldsFilledIn = false,
                             requiredFieldsError = resultState.error)

@@ -1,7 +1,7 @@
 package com.github.mrmitew.bodylog.adapter.profile_details.last_updated.presenter
 
+import com.github.mrmitew.bodylog.adapter.common.model.Error
 import com.github.mrmitew.bodylog.adapter.common.model.ResultState
-import com.github.mrmitew.bodylog.adapter.common.model.StateError
 import com.github.mrmitew.bodylog.adapter.common.model.ViewIntent
 import com.github.mrmitew.bodylog.adapter.common.presenter.DetachableMviPresenter
 import com.github.mrmitew.bodylog.adapter.profile_common.intent.LoadProfileIntent
@@ -44,7 +44,7 @@ class LastUpdatedPresenter
                 // No error? Then, just emit the old state. No view state changes needed to be done here.
                     is LoadProfileInteractor.State.Successful -> return previousState.copy(
                             lastUpdated = LastUpdatedTextState.Factory.DATE_FORMAT.format(resultState.profile.timestamp),
-                            error = StateError.Empty.INSTANCE)
+                            error = Error.Empty.INSTANCE)
 
                     is LoadProfileInteractor.State.Error -> return previousState.copy(
                             lastUpdated = LastUpdatedTextState.Factory.DEFAULT_VALUE,

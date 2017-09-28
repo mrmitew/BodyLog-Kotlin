@@ -7,7 +7,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import com.github.mrmitew.bodylog.R
-import com.github.mrmitew.bodylog.adapter.common.model.StateError
+import com.github.mrmitew.bodylog.adapter.common.model.Error
 import com.github.mrmitew.bodylog.adapter.profile_common.intent.LoadProfileIntent
 import com.github.mrmitew.bodylog.adapter.profile_edit.main.intent.CheckRequiredFieldsIntent
 import com.github.mrmitew.bodylog.adapter.profile_edit.main.intent.SaveProfileIntent
@@ -46,7 +46,7 @@ class ProfileEditActivity : BasePresentableActivity<ProfileEditView, ProfileEdit
 
     override fun render(state: ProfileEditState) {
         // Widgets
-        btn_save.isEnabled = state.requiredFieldsFilledIn && state.requiredFieldsError == StateError.Empty.INSTANCE
+        btn_save.isEnabled = state.requiredFieldsFilledIn && state.requiredFieldsError == Error.Empty.INSTANCE
 
         // Content
         inflate(state.profile)
@@ -54,13 +54,13 @@ class ProfileEditActivity : BasePresentableActivity<ProfileEditView, ProfileEdit
         // Layout visibility
         vg_state_loading.visibility = if (state.isInProgress) View.VISIBLE else View.GONE
         vg_state_error.visibility =
-                if (!state.isLoadSuccessful || state.loadError != StateError.Empty.INSTANCE)
+                if (!state.isLoadSuccessful || state.loadError != Error.Empty.INSTANCE)
                     View.VISIBLE
                 else
                     View.GONE
-        vg_state_result.visibility = if (state.loadError == StateError.Empty.INSTANCE) View.VISIBLE else View.GONE
+        vg_state_result.visibility = if (state.loadError == Error.Empty.INSTANCE) View.VISIBLE else View.GONE
 
-        if (!state.isSaveSuccessful && state.saveError != StateError.Empty.INSTANCE) {
+        if (!state.isSaveSuccessful && state.saveError != Error.Empty.INSTANCE) {
             // TODO: 9/5/17 Give feedback to the user
             println("render: ${state.saveError}")
         }
@@ -99,12 +99,10 @@ class ProfileEditActivity : BasePresentableActivity<ProfileEditView, ProfileEdit
                     .distinctUntilChanged()
                     .map { CheckRequiredFieldsIntent(it) }
 
-
     private fun getNameIntent() =
             et_name.textChanges()
                     .skip(1)
                     .map { it.toString() }
-
 
     private fun getDescriptionIntent() =
             et_description.textChanges()

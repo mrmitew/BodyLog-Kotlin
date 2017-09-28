@@ -5,7 +5,6 @@ import android.arch.lifecycle.ViewModelProviders
 import android.os.Bundle
 import android.view.View
 import com.github.mrmitew.bodylog.R
-import com.github.mrmitew.bodylog.adapter.common.model.StateError
 import com.github.mrmitew.bodylog.adapter.profile_common.intent.LoadProfileIntent
 import com.github.mrmitew.bodylog.adapter.profile_details.main.model.ProfileDetailsState
 import com.github.mrmitew.bodylog.adapter.profile_details.main.presenter.ProfileDetailsPresenter
@@ -41,14 +40,13 @@ class ProfileDetailsActivity : BasePresentableActivity<ProfileDetailsView, Profi
                     .build()
                     .injectMembers(this)
 
-
     override fun injectPresenterHolder(): BasePresenterHolder<ProfileDetailsView, ProfileDetailsState> =
             ViewModelProviders.of(this).get(PresenterHolder::class.java)
 
     override fun loadProfileIntent(): Observable<LoadProfileIntent> = Observable.just(LoadProfileIntent())
 
     override fun render(state: ProfileDetailsState) {
-        val hasError = state.loadError !is StateError.Empty
+        val hasError = state.loadError !is com.github.mrmitew.bodylog.adapter.common.model.StateError.Error.Empty
 
         // Inflate the layout with the content from the state
         inflate(state.profile)

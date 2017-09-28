@@ -1,7 +1,7 @@
 package com.github.mrmitew.bodylog.adapter.profile_details.main.presenter
 
+import com.github.mrmitew.bodylog.adapter.common.model.Error
 import com.github.mrmitew.bodylog.adapter.common.model.ResultState
-import com.github.mrmitew.bodylog.adapter.common.model.StateError
 import com.github.mrmitew.bodylog.adapter.common.model.ViewIntent
 import com.github.mrmitew.bodylog.adapter.common.presenter.DetachableMviPresenter
 import com.github.mrmitew.bodylog.adapter.profile_common.intent.LoadProfileIntent
@@ -48,7 +48,7 @@ class ProfileDetailsPresenter @Inject constructor(
                         previousState.copy(
                                 inProgress = true,
                                 loadSuccessful = false,
-                                loadError = StateError.Empty.INSTANCE)
+                                loadError = Error.Empty.INSTANCE)
 
                     is LoadProfileInteractor.State.Successful ->
                         previousState.copy(

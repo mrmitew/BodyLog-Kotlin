@@ -1,7 +1,7 @@
 package com.github.mrmitew.bodylog.adapter.profile_details.last_updated.presenter
 
+import com.github.mrmitew.bodylog.adapter.common.model.Error
 import com.github.mrmitew.bodylog.adapter.common.model.ResultState
-import com.github.mrmitew.bodylog.adapter.common.model.StateError
 import com.github.mrmitew.bodylog.adapter.common.model.ViewIntent
 import com.github.mrmitew.bodylog.adapter.profile_common.interactor.LoadProfileInteractor
 import com.github.mrmitew.bodylog.adapter.profile_details.last_updated.intent.GetProfileLastUpdatedIntent
@@ -43,7 +43,7 @@ class LastUpdatedPresenterTest {
         presenter = LastUpdatedPresenter(loadProfileInteractor = loadProfileInteractor,
                 profileResultStateRelay = profileResultStateRelay,
                 initialState = LastUpdatedTextState(lastUpdated = LastUpdatedTextState.Factory.DEFAULT_VALUE,
-                        error = StateError.Empty.INSTANCE))
+                        error = Error.Empty.INSTANCE))
     }
 
     @Test
@@ -127,7 +127,7 @@ class LastUpdatedPresenterTest {
         //
         // Assert
         //
-        assertTrue(newUiState.error == StateError.Empty.INSTANCE)
+        assertTrue(newUiState.error == Error.Empty.INSTANCE)
     }
 
     @Test

@@ -1,6 +1,6 @@
 package com.github.mrmitew.bodylog.adapter.profile_details.last_updated.model
 
-import com.github.mrmitew.bodylog.adapter.common.model.StateError
+import com.github.mrmitew.bodylog.adapter.common.model.Error
 import org.junit.Assert.assertTrue
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -13,7 +13,7 @@ class LastUpdatedTextStateTest {
     fun shouldHaveDefaultValues_WhenIdle() {
         val state = LastUpdatedTextState.Factory.idle()
         assertTrue(state.lastUpdated == LastUpdatedTextState.Factory.DEFAULT_VALUE)
-        assertTrue(state.error == StateError.Empty.INSTANCE)
+        assertTrue(state.error == Error.Empty.INSTANCE)
     }
 
     @Test
@@ -25,8 +25,8 @@ class LastUpdatedTextStateTest {
 
     @Test
     fun shouldNotHaveError_WhenSuccessful() {
-        val state = LastUpdatedTextState.Factory.success(mock(Long::class.java))
-        assertTrue(state.error == StateError.Empty.INSTANCE)
+        val state = LastUpdatedTextState.Factory.success(0L)
+        assertTrue(state.error == Error.Empty.INSTANCE)
     }
 
     @Test

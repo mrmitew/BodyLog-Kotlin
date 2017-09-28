@@ -5,7 +5,7 @@ import android.arch.lifecycle.ViewModelProviders
 import android.content.Context
 import android.support.v7.app.AppCompatActivity
 import android.util.AttributeSet
-import com.github.mrmitew.bodylog.adapter.common.model.StateError
+import com.github.mrmitew.bodylog.adapter.common.model.Error
 import com.github.mrmitew.bodylog.adapter.profile_details.last_updated.intent.GetProfileLastUpdatedIntent
 import com.github.mrmitew.bodylog.adapter.profile_details.last_updated.model.LastUpdatedTextState
 import com.github.mrmitew.bodylog.adapter.profile_details.last_updated.presenter.LastUpdatedPresenter
@@ -37,7 +37,7 @@ class LastUpdatedTextView : BasePresentableTextView<LastUpdatedView, LastUpdated
             = Observable.just(GetProfileLastUpdatedIntent())
 
     override fun render(state: LastUpdatedTextState) {
-        if (state.error != StateError.Empty.INSTANCE) {
+        if (state.error != Error.Empty.INSTANCE) {
             // TODO: 9/6/17
             println("render: ${state.error}")
         }

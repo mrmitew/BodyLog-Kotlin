@@ -1,6 +1,6 @@
 package com.github.mrmitew.bodylog.adapter.profile_details.last_updated.model
 
-import com.github.mrmitew.bodylog.adapter.common.model.StateError
+import com.github.mrmitew.bodylog.adapter.common.model.Error
 import com.github.mrmitew.bodylog.adapter.common.model.ViewState
 import java.text.SimpleDateFormat
 import java.util.*
@@ -13,12 +13,12 @@ data class LastUpdatedTextState(val lastUpdated: String,
 
         fun idle(): LastUpdatedTextState {
             return LastUpdatedTextState(lastUpdated = DEFAULT_VALUE,
-                    error = StateError.Empty.INSTANCE)
+                    error = Error.Empty.INSTANCE)
         }
 
         fun success(time: Long): LastUpdatedTextState {
             return LastUpdatedTextState(lastUpdated = DATE_FORMAT.format(time),
-                    error = StateError.Empty.INSTANCE)
+                    error = Error.Empty.INSTANCE)
         }
 
         fun error(error: Throwable): LastUpdatedTextState {

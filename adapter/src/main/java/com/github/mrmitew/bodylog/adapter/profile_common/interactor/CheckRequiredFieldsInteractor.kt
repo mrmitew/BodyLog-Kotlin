@@ -12,11 +12,9 @@ import javax.inject.Singleton
 @Singleton
 class CheckRequiredFieldsInteractor @Inject constructor(private val postExecutionThread: PostExecutionThread)
     : ObservableTransformer<CheckRequiredFieldsIntent, CheckRequiredFieldsInteractor.State> {
-    class Error {
-        class FieldsNotFilledInThrowable : Throwable() {
-            override fun toString(): String {
-                return "FieldsNotFilledInThrowable{}"
-            }
+    sealed class Error : Throwable() {
+        class FieldsNotFilledInThrowable : Error() {
+            override fun toString() = "FieldsNotFilledInThrowable{}"
         }
     }
 

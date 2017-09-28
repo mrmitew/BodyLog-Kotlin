@@ -33,7 +33,6 @@ class LoadProfileInteractor @Inject constructor(private val threadExecutor: Thre
     fun getUseCaseObservable(): Observable<Profile> =
             repository.getProfileRefreshing()
 
-
     private fun buildUseCaseObservable(): Observable<Profile> =
             getUseCaseObservable()
                     .subscribeOn(Schedulers.from(threadExecutor))
