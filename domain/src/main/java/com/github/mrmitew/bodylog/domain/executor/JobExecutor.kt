@@ -23,7 +23,7 @@ import java.util.concurrent.*
  */
 class JobExecutor(initialPoolSize: Int = 3,
                   maxPoolSize: Int = 5,
-                  // Sets the amount of time an idle thread waits before terminating
+        // Sets the amount of time an idle thread waits before terminating
                   keepAliveTime: Pair<Long, TimeUnit> = Pair(10, TimeUnit.SECONDS)) : ThreadExecutor {
 
     private val workQueue: BlockingQueue<Runnable>
@@ -49,8 +49,6 @@ class JobExecutor(initialPoolSize: Int = 3,
 
         private var counter = 0
 
-        override fun newThread(runnable: Runnable): Thread =
-                Thread(runnable, THREAD_NAME + counter++)
-
+        override fun newThread(runnable: Runnable) = Thread(runnable, THREAD_NAME + counter++)
     }
 }

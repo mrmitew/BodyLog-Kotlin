@@ -6,8 +6,6 @@ import com.github.mrmitew.bodylog.framework.profile_edit.main.view.ProfileEditAc
 
 interface PresenterHolderInjector {
     fun inject(target: ProfileDetailsActivity.PresenterHolder)
-
     fun inject(target: ProfileEditActivity.PresenterHolder)
-
     fun inject(target: LastUpdatedTextView.PresenterHolder)
 }

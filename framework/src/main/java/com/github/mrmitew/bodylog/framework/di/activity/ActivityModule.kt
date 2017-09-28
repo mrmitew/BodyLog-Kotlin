@@ -10,7 +10,5 @@ abstract class ActivityModule<out T : FragmentActivity>(protected val activity: 
 
     @Provides
     @ActivityScope
-    fun provideActivity(): T {
-        return activity
-    }
+    fun provideActivity(): T = activity
 }

@@ -8,8 +8,8 @@ import io.reactivex.Observable
 import java.util.concurrent.TimeUnit
 
 class ProfileRepository : Repository {
-    private val mProfileBehaviorRelay: BehaviorRelay<Profile> = BehaviorRelay.create()
-    private var sCachedProfile = Profile(
+    private val profileBehaviorRelay: BehaviorRelay<Profile> = BehaviorRelay.create()
+    private var cachedProfile = Profile(
             name = "John Doe",
             description = "With hard work you can achieve your goals and you can become successful!",
             weight = 70f,
@@ -19,20 +19,17 @@ class ProfileRepository : Repository {
             armsSize = 40f,
             waistSize = 74.5f)
 
-    override fun getProfile(): Observable<Profile> {
-        return Observable.just<Profile>(sCachedProfile)
-                // Simulate a long process
-                .delay(1500, TimeUnit.MILLISECONDS)
-    }
+    override fun getProfile(): Observable<Profile> =
+            Observable.just<Profile>(cachedProfile)
+                    // Simulate a long process
+                    .delay(1500, TimeUnit.MILLISECONDS)
 
-    override fun getProfileRefreshing(): Observable<Profile> {
-        return mProfileBehaviorRelay.startWith(sCachedProfile)
-                // Simulate a long process
-                .delay(1500, TimeUnit.MILLISECONDS)
-    }
+    override fun getProfileRefreshing(): Observable<Profile> =
+            profileBehaviorRelay.startWith(cachedProfile)
+                    // Simulate a long process
+                    .delay(1500, TimeUnit.MILLISECONDS)
 
-    override fun setProfile(profile: Profile): Completable {
-        return Completable.fromAction { sCachedProfile = profile }
-                .doOnComplete { mProfileBehaviorRelay.accept(profile) }
-    }
+    override fun setProfile(profile: Profile): Completable =
+            Completable.fromAction { cachedProfile = profile }
+                    .doOnComplete { profileBehaviorRelay.accept(profile) }
 }

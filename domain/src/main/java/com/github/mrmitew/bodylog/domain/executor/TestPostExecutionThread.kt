@@ -4,5 +4,5 @@ import io.reactivex.Scheduler
 import io.reactivex.schedulers.Schedulers
 
 class TestPostExecutionThread : PostExecutionThread {
-    override fun getScheduler(): Scheduler = Schedulers.trampoline()
+    override fun scheduler(): Scheduler = Schedulers.trampoline()
 }

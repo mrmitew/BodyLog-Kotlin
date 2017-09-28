@@ -23,5 +23,5 @@ import io.reactivex.Scheduler
  * implementation of this interface will change context and update the UI.
  */
 interface PostExecutionThread {
-    fun getScheduler(): Scheduler
+    fun scheduler(): Scheduler
 }

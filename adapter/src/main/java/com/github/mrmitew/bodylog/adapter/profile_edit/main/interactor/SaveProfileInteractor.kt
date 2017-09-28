@@ -28,7 +28,7 @@ class SaveProfileInteractor @Inject constructor(private val threadExecutor: Thre
                     .map { State.Successful(it) as State }
                     .onErrorReturn { State.Error(it) }
                     .startWith(State.InProgress())
-                    .observeOn(postExecutionThread.getScheduler())
+                    .observeOn(postExecutionThread.scheduler())
 
     internal fun getUseCaseObservable(profile: Profile): Observable<Profile> =
             repository.setProfile(profile)

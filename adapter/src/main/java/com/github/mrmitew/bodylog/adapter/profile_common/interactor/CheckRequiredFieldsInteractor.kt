@@ -28,7 +28,7 @@ class CheckRequiredFieldsInteractor @Inject constructor(private val postExecutio
                     .concatMap { getUseCaseObservable(it) }
                     .map { State.Successful() as State }
                     .onErrorReturn({ State.Error(it) })
-                    .observeOn(postExecutionThread.getScheduler())
+                    .observeOn(postExecutionThread.scheduler())
 
     internal fun getUseCaseObservable(intent: CheckRequiredFieldsIntent): Observable<State> =
             Observable.just(when (intent.isFilledIn) {
