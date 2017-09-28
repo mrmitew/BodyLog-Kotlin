@@ -35,9 +35,25 @@ abstract class BaseMviPresenter<V : BaseView<S>, S : UiState>(
      */
     protected val viewGateways: CompositeDisposable = CompositeDisposable()
 
+    /**
+     * Creates a new view/UI state, based on previous ui state
+     * and current result state (normally, created by an interactor)
+     */
     internal abstract fun createViewState(previousState: S, resultState: ResultState): S
+
+    /**
+     * Transforms UI intent stream to result state stream
+     */
     internal abstract fun createResultStateObservable(uiIntentStream: Observable<UIIntent>): Observable<ResultState>
+
+    /**
+     * Represents a stream of all UI intent observables that have been merged into one
+     */
     protected abstract fun viewIntents(): Observable<UIIntent>
+
+    /**
+     * Represents an initial UI/view state
+     */
     protected abstract val initialState: S
 
     override fun bindIntents() {

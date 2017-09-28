@@ -48,19 +48,25 @@ class LastUpdatedPresenterTest {
 
     @Test
     fun shouldReturnProfileResultState_ForGetProfileLastUpdatedIntent() {
+        //
         // Arrange
+        //
         val expectedProfile = mock(Profile::class.java)
-        val loadProfileIntent = Observable.just(GetProfileLastUpdatedIntent()).cast(UIIntent::class.java)
+        val uiIntentStream = Observable.just(GetProfileLastUpdatedIntent()).cast(UIIntent::class.java)
 
+        //
         // Act
-        val resultStateObservable = presenter.createResultStateObservable(loadProfileIntent)
-        // Emit a result state, just like as if it was from the repository
+        //
+        val resultStateStream = presenter.createResultStateObservable(uiIntentStream)
+        // Emit a result state for a profile request, just like as if it was from the repository
         profileResultStateRelay.accept(LoadProfileInteractor.State.Successful(expectedProfile))
-        val resultStream = resultStateObservable.test()
+        val resultStreamObserver = resultStateStream.test()
 
+        //
         // Assert
-        assertTrue(resultStream.valueCount() == 1)
-        val resultState = resultStream.values()[0]
+        //
+        assertTrue(resultStreamObserver.valueCount() == 1)
+        val resultState = resultStreamObserver.values()[0]
         when (resultState) {
             is LoadProfileInteractor.State.Successful -> assertTrue(resultState.profile == expectedProfile)
             else -> throw RuntimeException("Expected a successful state")
@@ -74,7 +80,7 @@ class LastUpdatedPresenterTest {
         // Arrange
         //
         val expectedProfile = mock(Profile::class.java)
-        val loadProfileIntent = Observable.just(GetProfileLastUpdatedIntent()).cast(UIIntent::class.java)
+        val uiIntentStream = Observable.just(GetProfileLastUpdatedIntent()).cast(UIIntent::class.java)
 
         // Fire a view intent to load a profile
         `when`(view.getProfileLastUpdatedIntent()).thenReturn(Observable.just(GetProfileLastUpdatedIntent()))
@@ -87,71 +93,96 @@ class LastUpdatedPresenterTest {
         //
         attachView()
 
-        val resultStateObservable = presenter.createResultStateObservable(loadProfileIntent)
-        val resultStream = resultStateObservable.test()
+        val resultStateStream = presenter.createResultStateObservable(uiIntentStream)
+        val resultStreamObserver = resultStateStream.test()
 
         //
         // Assert
         //
-
-        assertTrue(resultStream.valueCount() == 1)
-        val resultState = resultStream.values()[0]
+        assertTrue(resultStreamObserver.valueCount() == 1)
+        val resultState = resultStreamObserver.values()[0]
         when (resultState) {
             is LoadProfileInteractor.State.Successful -> assertTrue(resultState.profile == expectedProfile)
             else -> throw RuntimeException("Expected a successful state")
         }
 
-        // Clean up
+        //
+        // Act: Clean up
+        //
         detachView()
     }
 
     @Test
     fun shouldClearError_WhenProfileResultIsSuccessful() {
+        //
         // Arrange
+        //
         val currentState = LastUpdatedTextState.Factory.error(mock(Throwable::class.java))
 
+        //
         // Act
+        //
         val newUiState = presenter.createViewState(currentState, resultState = LoadProfileInteractor.State.Successful(mock(Profile::class.java)))
 
+        //
         // Assert
+        //
         assertTrue(newUiState.error == StateError.Empty.INSTANCE)
     }
 
     @Test
     fun shouldDefaultAndSetErrorState_WhenProfileResultIsError() {
+        //
         // Arrange
+        //
         val currentState = LastUpdatedTextState.Factory.success(0L)
 
+        //
         // Act
+        //
         val newUiState = presenter.createViewState(currentState, resultState = LoadProfileInteractor.State.Error(error))
 
+        //
         // Assert
+        //
         assertTrue(newUiState.error == error)
         assertTrue(newUiState.lastUpdated == LastUpdatedTextState.Factory.DEFAULT_VALUE)
     }
 
     @Test
     fun shouldReturnPreviousState_WhenProfileResultIsInProgress_AndPreviosStateHasNoError() {
+        //
         // Arrange
+        //
         val currentState = LastUpdatedTextState.Factory.success(0L)
 
+        //
         // Act
+        //
         val newUiState = presenter.createViewState(currentState, resultState = LoadProfileInteractor.State.InProgress())
 
+        //
         // Assert
+        //
         assertTrue(currentState == newUiState)
         assertTrue(currentState.hashCode() == newUiState.hashCode())
     }
 
     @Test
     fun shouldReturnPreviousState_WhenProfileResultIsInProgress_AndPreviosStateHasError() {
+        //
         // Arrange
+        //
         val currentState = LastUpdatedTextState.Factory.error(error)
 
+        //
         // Act
+        //
         val newUiState = presenter.createViewState(currentState, resultState = LoadProfileInteractor.State.InProgress())
 
+        //
         // Assert
+        //
         assertTrue(currentState == newUiState)
         assertTrue(currentState.hashCode() == newUiState.hashCode())
     }
