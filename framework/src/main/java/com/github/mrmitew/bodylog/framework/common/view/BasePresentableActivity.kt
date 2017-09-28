@@ -1,12 +1,12 @@
 package com.github.mrmitew.bodylog.framework.common.view
 
 import android.os.Bundle
-import com.github.mrmitew.bodylog.adapter.common.UiState
+import com.github.mrmitew.bodylog.adapter.common.ViewState
 
 import com.github.mrmitew.bodylog.adapter.common.view.BaseView
 import com.github.mrmitew.bodylog.framework.common.presenter.BasePresenterHolder
 
-abstract class BasePresentableActivity<V : BaseView<S>, S : UiState> : InjectableActivity(), Presentable<V, S> {
+abstract class BasePresentableActivity<V : BaseView<S>, S : ViewState> : InjectableActivity(), Presentable<V, S> {
     private lateinit var presenterHolder: BasePresenterHolder<V, S>
 
     override fun onCreate(savedInstanceState: Bundle?) {

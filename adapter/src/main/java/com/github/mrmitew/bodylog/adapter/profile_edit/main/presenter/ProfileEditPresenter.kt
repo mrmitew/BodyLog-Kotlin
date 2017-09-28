@@ -2,7 +2,7 @@ package com.github.mrmitew.bodylog.adapter.profile_edit.main.presenter
 
 import com.github.mrmitew.bodylog.adapter.common.model.ResultState
 import com.github.mrmitew.bodylog.adapter.common.model.StateError
-import com.github.mrmitew.bodylog.adapter.common.model.UIIntent
+import com.github.mrmitew.bodylog.adapter.common.model.ViewIntent
 import com.github.mrmitew.bodylog.adapter.common.presenter.DetachableMviPresenter
 import com.github.mrmitew.bodylog.adapter.profile_common.intent.LoadProfileIntent
 import com.github.mrmitew.bodylog.adapter.profile_common.interactor.CheckRequiredFieldsInteractor
@@ -14,6 +14,7 @@ import com.github.mrmitew.bodylog.adapter.profile_edit.main.model.ProfileEditSta
 import com.github.mrmitew.bodylog.adapter.profile_edit.main.view.ProfileEditView
 import com.jakewharton.rxrelay2.BehaviorRelay
 import io.reactivex.Observable
+import io.reactivex.disposables.Disposable
 import javax.inject.Inject
 
 class ProfileEditPresenter
@@ -25,25 +26,23 @@ class ProfileEditPresenter
                     override val emptyView: ProfileEditView = ProfileEditView.NoOp())
     : DetachableMviPresenter<ProfileEditView, ProfileEditState>(emptyView) {
 
-    override fun viewIntents(): Observable<UIIntent> = Observable.merge(view.getRequiredFieldsFilledInIntent(),
+    override fun internalIntents(): Array<Disposable> =
+            arrayOf(Observable.just(LoadProfileIntent())
+                    .compose(loadProfileInteractor)
+                    .doOnNext { println("[EDIT] [PROFILE MODEL] (${it.hashCode()} : $it") }
+                    .subscribe(profileResultStateRelay))
+
+    override fun viewIntentStream(): Observable<ViewIntent> = Observable.merge(view.getRequiredFieldsFilledInIntent(),
             view.getSaveIntent(), view.getLoadProfileIntent())
 
-    override fun bindInternalIntents() {
-        super.bindInternalIntents()
-        modelGateways.add(Observable.just(LoadProfileIntent())
-                .compose(loadProfileInteractor)
-                .doOnNext { println("[EDIT] [PROFILE MODEL] (${it.hashCode()} : $it") }
-                .subscribe(profileResultStateRelay))
-    }
-
-    override fun createResultStateObservable(uiIntentStream: Observable<UIIntent>): Observable<ResultState> =
-            uiIntentStream.publish { shared ->
+    override fun resultStateStream(viewIntentStream: Observable<ViewIntent>): Observable<ResultState> =
+            viewIntentStream.publish { shared ->
                 Observable.merge(shared.ofType(LoadProfileIntent::class.java).flatMap { profileResultStateRelay },
                         shared.ofType(CheckRequiredFieldsIntent::class.java).compose(checkRequiredFieldsInteractor),
                         shared.ofType(SaveProfileIntent::class.java).compose(saveProfileInteractor))
             }
 
-    override fun createViewState(previousState: ProfileEditState, resultState: ResultState): ProfileEditState {
+    override fun viewState(previousState: ProfileEditState, resultState: ResultState): ProfileEditState {
         when (resultState) {
             is LoadProfileInteractor.State ->
                 return when (resultState) {

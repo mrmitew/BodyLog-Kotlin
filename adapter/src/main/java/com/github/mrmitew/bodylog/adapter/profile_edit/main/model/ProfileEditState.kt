@@ -1,6 +1,6 @@
 package com.github.mrmitew.bodylog.adapter.profile_edit.main.model
 
-import com.github.mrmitew.bodylog.adapter.common.UiState
+import com.github.mrmitew.bodylog.adapter.common.ViewState
 import com.github.mrmitew.bodylog.adapter.common.model.StateError
 import com.github.mrmitew.bodylog.domain.repository.entity.Profile
 
@@ -12,7 +12,7 @@ data class ProfileEditState(
         val saveError: Throwable,
         val requiredFieldsFilledIn: Boolean,
         val requiredFieldsError: Throwable,
-        val profile: Profile) : UiState() {
+        val profile: Profile) : ViewState() {
 
     object Factory {
         fun idle(): ProfileEditState = ProfileEditState(

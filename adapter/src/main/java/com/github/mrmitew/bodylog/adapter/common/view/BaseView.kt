@@ -1,7 +1,7 @@
 package com.github.mrmitew.bodylog.adapter.common.view
 
-import com.github.mrmitew.bodylog.adapter.common.UiState
+import com.github.mrmitew.bodylog.adapter.common.ViewState
 
-interface BaseView<S : UiState> {
+interface BaseView<S : ViewState> {
     fun render(state: S)
 }

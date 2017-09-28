@@ -2,7 +2,7 @@ package com.github.mrmitew.bodylog.adapter.profile_details.main.presenter
 
 import com.github.mrmitew.bodylog.adapter.common.model.ResultState
 import com.github.mrmitew.bodylog.adapter.common.model.StateError
-import com.github.mrmitew.bodylog.adapter.common.model.UIIntent
+import com.github.mrmitew.bodylog.adapter.common.model.ViewIntent
 import com.github.mrmitew.bodylog.adapter.common.presenter.DetachableMviPresenter
 import com.github.mrmitew.bodylog.adapter.profile_common.intent.LoadProfileIntent
 import com.github.mrmitew.bodylog.adapter.profile_common.interactor.LoadProfileInteractor
@@ -10,6 +10,7 @@ import com.github.mrmitew.bodylog.adapter.profile_details.main.model.ProfileDeta
 import com.github.mrmitew.bodylog.adapter.profile_details.main.view.ProfileDetailsView
 import com.jakewharton.rxrelay2.BehaviorRelay
 import io.reactivex.Observable
+import io.reactivex.disposables.Disposable
 import javax.inject.Inject
 
 class ProfileDetailsPresenter @Inject constructor(
@@ -27,21 +28,19 @@ class ProfileDetailsPresenter @Inject constructor(
         override val emptyView: ProfileDetailsView = ProfileDetailsView.NoOp())
     : DetachableMviPresenter<ProfileDetailsView, ProfileDetailsState>(emptyView) {
 
-    override fun viewIntents(): Observable<UIIntent> =
-            view.getLoadProfileIntent().cast(UIIntent::class.java)
+    override fun internalIntents(): Array<Disposable> =
+            arrayOf(Observable.just(LoadProfileIntent())
+                    .compose(loadProfileInteractor)
+                    .doOnNext { println("[DETAILS] [PROFILE MODEL] (${it.hashCode()}) : $it") }
+                    .subscribe(profileResultStateRelay))
 
-    override fun bindInternalIntents() {
-        super.bindInternalIntents()
-        modelGateways.add(Observable.just(LoadProfileIntent())
-                .compose(loadProfileInteractor)
-                .doOnNext { println("[DETAILS] [PROFILE MODEL] (${it.hashCode()}) : $it") }
-                .subscribe(profileResultStateRelay))
-    }
+    override fun viewIntentStream(): Observable<ViewIntent> =
+            view.getLoadProfileIntent().cast(ViewIntent::class.java)
 
-    override fun createResultStateObservable(uiIntentStream: Observable<UIIntent>): Observable<ResultState> =
-            uiIntentStream.publish { shared -> shared.ofType(LoadProfileIntent::class.java).flatMap { profileResultStateRelay } }
+    override fun resultStateStream(viewIntentStream: Observable<ViewIntent>): Observable<ResultState> =
+            viewIntentStream.publish { shared -> shared.ofType(LoadProfileIntent::class.java).flatMap { profileResultStateRelay } }
 
-    override fun createViewState(previousState: ProfileDetailsState, resultState: ResultState): ProfileDetailsState {
+    override fun viewState(previousState: ProfileDetailsState, resultState: ResultState): ProfileDetailsState {
         when (resultState) {
             is LoadProfileInteractor.State ->
                 return when (resultState) {

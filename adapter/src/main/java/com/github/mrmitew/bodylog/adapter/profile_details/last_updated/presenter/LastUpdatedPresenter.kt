@@ -2,7 +2,7 @@ package com.github.mrmitew.bodylog.adapter.profile_details.last_updated.presente
 
 import com.github.mrmitew.bodylog.adapter.common.model.ResultState
 import com.github.mrmitew.bodylog.adapter.common.model.StateError
-import com.github.mrmitew.bodylog.adapter.common.model.UIIntent
+import com.github.mrmitew.bodylog.adapter.common.model.ViewIntent
 import com.github.mrmitew.bodylog.adapter.common.presenter.DetachableMviPresenter
 import com.github.mrmitew.bodylog.adapter.profile_common.intent.LoadProfileIntent
 import com.github.mrmitew.bodylog.adapter.profile_common.interactor.LoadProfileInteractor
@@ -11,6 +11,7 @@ import com.github.mrmitew.bodylog.adapter.profile_details.last_updated.model.Las
 import com.github.mrmitew.bodylog.adapter.profile_details.last_updated.view.LastUpdatedView
 import com.jakewharton.rxrelay2.BehaviorRelay
 import io.reactivex.Observable
+import io.reactivex.disposables.Disposable
 import javax.inject.Inject
 
 class LastUpdatedPresenter
@@ -20,21 +21,21 @@ class LastUpdatedPresenter
                     override val emptyView: LastUpdatedView = LastUpdatedView.NoOp()) :
         DetachableMviPresenter<LastUpdatedView, LastUpdatedTextState>(emptyView) {
 
-    override fun viewIntents(): Observable<UIIntent> =
-            view.getProfileLastUpdatedIntent().cast(UIIntent::class.java)
+    override fun internalIntents(): Array<Disposable> =
+            arrayOf(Observable.just(LoadProfileIntent())
+                    .compose(loadProfileInteractor)
+                    .doOnNext { println("[LAST_UPDATED] [PROFILE MODEL] (${it.hashCode()}) : $it") }
+                    .subscribe(profileResultStateRelay))
 
-    override fun bindInternalIntents() {
-        super.bindInternalIntents()
-        modelGateways.add(Observable.just(LoadProfileIntent())
-                .compose(loadProfileInteractor)
-                .doOnNext { println("[LAST_UPDATED] [PROFILE MODEL] (${it.hashCode()}) : $it") }
-                .subscribe(profileResultStateRelay))
-    }
+    override fun viewIntentStream(): Observable<ViewIntent> =
+            view.getProfileLastUpdatedIntent().cast(ViewIntent::class.java)
 
-    override fun createResultStateObservable(uiIntentStream: Observable<UIIntent>): Observable<ResultState> =
-            uiIntentStream.publish { shared -> shared.ofType(GetProfileLastUpdatedIntent::class.java).flatMap { profileResultStateRelay } }
+    override fun resultStateStream(viewIntentStream: Observable<ViewIntent>) =
+            viewIntentStream.publish { shared ->
+                shared.ofType(GetProfileLastUpdatedIntent::class.java).flatMap { profileResultStateRelay }
+            }
 
-    override fun createViewState(previousState: LastUpdatedTextState, resultState: ResultState): LastUpdatedTextState {
+    override fun viewState(previousState: LastUpdatedTextState, resultState: ResultState): LastUpdatedTextState {
         when (resultState) {
             is LoadProfileInteractor.State ->
                 return when (resultState) {

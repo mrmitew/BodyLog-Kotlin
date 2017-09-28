@@ -2,7 +2,7 @@ package com.github.mrmitew.bodylog.adapter.profile_details.last_updated.presente
 
 import com.github.mrmitew.bodylog.adapter.common.model.ResultState
 import com.github.mrmitew.bodylog.adapter.common.model.StateError
-import com.github.mrmitew.bodylog.adapter.common.model.UIIntent
+import com.github.mrmitew.bodylog.adapter.common.model.ViewIntent
 import com.github.mrmitew.bodylog.adapter.profile_common.interactor.LoadProfileInteractor
 import com.github.mrmitew.bodylog.adapter.profile_details.last_updated.intent.GetProfileLastUpdatedIntent
 import com.github.mrmitew.bodylog.adapter.profile_details.last_updated.model.LastUpdatedTextState
@@ -52,12 +52,12 @@ class LastUpdatedPresenterTest {
         // Arrange
         //
         val expectedProfile = mock(Profile::class.java)
-        val uiIntentStream = Observable.just(GetProfileLastUpdatedIntent()).cast(UIIntent::class.java)
+        val viewIntentStream = Observable.just(GetProfileLastUpdatedIntent()).cast(ViewIntent::class.java)
 
         //
         // Act
         //
-        val resultStateStream = presenter.createResultStateObservable(uiIntentStream)
+        val resultStateStream = presenter.resultStateStream(viewIntentStream)
         // Emit a result state for a profile request, just like as if it was from the repository
         profileResultStateRelay.accept(LoadProfileInteractor.State.Successful(expectedProfile))
         val resultStreamObserver = resultStateStream.test()
@@ -80,7 +80,7 @@ class LastUpdatedPresenterTest {
         // Arrange
         //
         val expectedProfile = mock(Profile::class.java)
-        val uiIntentStream = Observable.just(GetProfileLastUpdatedIntent()).cast(UIIntent::class.java)
+        val viewIntentStream = Observable.just(GetProfileLastUpdatedIntent()).cast(ViewIntent::class.java)
 
         // Fire a view intent to load a profile
         `when`(view.getProfileLastUpdatedIntent()).thenReturn(Observable.just(GetProfileLastUpdatedIntent()))
@@ -93,7 +93,7 @@ class LastUpdatedPresenterTest {
         //
         attachView()
 
-        val resultStateStream = presenter.createResultStateObservable(uiIntentStream)
+        val resultStateStream = presenter.resultStateStream(viewIntentStream)
         val resultStreamObserver = resultStateStream.test()
 
         //
@@ -122,7 +122,7 @@ class LastUpdatedPresenterTest {
         //
         // Act
         //
-        val newUiState = presenter.createViewState(currentState, resultState = LoadProfileInteractor.State.Successful(mock(Profile::class.java)))
+        val newUiState = presenter.viewState(currentState, resultState = LoadProfileInteractor.State.Successful(mock(Profile::class.java)))
 
         //
         // Assert
@@ -140,7 +140,7 @@ class LastUpdatedPresenterTest {
         //
         // Act
         //
-        val newUiState = presenter.createViewState(currentState, resultState = LoadProfileInteractor.State.Error(error))
+        val newUiState = presenter.viewState(currentState, resultState = LoadProfileInteractor.State.Error(error))
 
         //
         // Assert
@@ -159,7 +159,7 @@ class LastUpdatedPresenterTest {
         //
         // Act
         //
-        val newUiState = presenter.createViewState(currentState, resultState = LoadProfileInteractor.State.InProgress())
+        val newUiState = presenter.viewState(currentState, resultState = LoadProfileInteractor.State.InProgress())
 
         //
         // Assert
@@ -178,7 +178,7 @@ class LastUpdatedPresenterTest {
         //
         // Act
         //
-        val newUiState = presenter.createViewState(currentState, resultState = LoadProfileInteractor.State.InProgress())
+        val newUiState = presenter.viewState(currentState, resultState = LoadProfileInteractor.State.InProgress())
 
         //
         // Assert
