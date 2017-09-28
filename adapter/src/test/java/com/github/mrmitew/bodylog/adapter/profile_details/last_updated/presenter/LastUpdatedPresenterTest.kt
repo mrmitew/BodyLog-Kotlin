@@ -123,7 +123,7 @@ class LastUpdatedPresenterTest {
         //
         // Assert
         //
-        assertTrue(newUiState.error == Error.Empty.INSTANCE)
+        assertTrue(newUiState.error is Error.Empty)
     }
 
     @Test

@@ -13,7 +13,7 @@ class LastUpdatedTextStateTest {
     fun shouldHaveDefaultValues_WhenIdle() {
         val state = LastUpdatedTextState.Factory.idle()
         assertTrue(state.lastUpdated == LastUpdatedTextState.Factory.DEFAULT_VALUE)
-        assertTrue(state.error == Error.Empty.INSTANCE)
+        assertTrue(state.error is Error.Empty)
     }
 
     @Test
@@ -26,7 +26,7 @@ class LastUpdatedTextStateTest {
     @Test
     fun shouldNotHaveError_WhenSuccessful() {
         val state = LastUpdatedTextState.Factory.success(0L)
-        assertTrue(state.error == Error.Empty.INSTANCE)
+        assertTrue(state.error is Error.Empty)
     }
 
     @Test

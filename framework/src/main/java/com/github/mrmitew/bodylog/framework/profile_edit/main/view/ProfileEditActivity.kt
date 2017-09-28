@@ -46,7 +46,7 @@ class ProfileEditActivity : BasePresentableActivity<ProfileEditView, ProfileEdit
 
     override fun render(state: ProfileEditState) {
         // Widgets
-        btn_save.isEnabled = state.requiredFieldsFilledIn && state.requiredFieldsError == Error.Empty.INSTANCE
+        btn_save.isEnabled = state.requiredFieldsFilledIn && state.requiredFieldsError is Error.Empty
 
         // Content
         inflate(state.profile)
@@ -54,13 +54,13 @@ class ProfileEditActivity : BasePresentableActivity<ProfileEditView, ProfileEdit
         // Layout visibility
         vg_state_loading.visibility = if (state.isInProgress) View.VISIBLE else View.GONE
         vg_state_error.visibility =
-                if (!state.isLoadSuccessful || state.loadError != Error.Empty.INSTANCE)
+                if (!state.isLoadSuccessful || state.loadError !is Error.Empty)
                     View.VISIBLE
                 else
                     View.GONE
-        vg_state_result.visibility = if (state.loadError == Error.Empty.INSTANCE) View.VISIBLE else View.GONE
+        vg_state_result.visibility = if (state.loadError is Error.Empty) View.VISIBLE else View.GONE
 
-        if (!state.isSaveSuccessful && state.saveError != Error.Empty.INSTANCE) {
+        if (!state.isSaveSuccessful && state.saveError is Error.Empty) {
             // TODO: 9/5/17 Give feedback to the user
             println("render: ${state.saveError}")
         }
