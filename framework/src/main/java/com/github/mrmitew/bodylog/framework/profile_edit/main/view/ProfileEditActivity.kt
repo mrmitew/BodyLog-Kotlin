@@ -111,14 +111,15 @@ class ProfileEditActivity : BasePresentableActivity<ProfileEditView, ProfileEdit
                     .skip(1)
                     .map { it.toString() }
 
-    private fun inflate(profile: Profile) {
-        et_name.setText(profile.name)
-        et_description.setText(profile.description)
-        et_weight.setText(profile.weight.toString())
-        et_body_fat_percentage.setText(profile.bodyFatPercentage.toString())
-        et_back_size.setText(profile.backSize.toString())
-        et_chest_size.setText(profile.chestSize.toString())
-        et_arms_size.setText(profile.armsSize.toString())
-        et_waist_size.setText(profile.waistSize.toString())
-    }
+    private fun inflate(profile: Profile) =
+            profile.apply {
+                et_name.setText(name)
+                et_description.setText(description)
+                et_weight.setText(weight.toString())
+                et_body_fat_percentage.setText(bodyFatPercentage.toString())
+                et_back_size.setText(backSize.toString())
+                et_chest_size.setText(chestSize.toString())
+                et_arms_size.setText(armsSize.toString())
+                et_waist_size.setText(waistSize.toString())
+            }
 }

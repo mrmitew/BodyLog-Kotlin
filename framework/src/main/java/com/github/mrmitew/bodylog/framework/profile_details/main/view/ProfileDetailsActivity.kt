@@ -64,16 +64,17 @@ class ProfileDetailsActivity : BasePresentableActivity<ProfileDetailsView, Profi
         vg_state_error.visibility = if (hasError) View.VISIBLE else View.GONE
     }
 
-    private fun inflate(profile: Profile) {
-        tv_name.text = profile.name
-        tv_description.text = profile.description
-        tv_weight.text = profile.weight.toString()
-        tv_body_fat_percentage.text = profile.bodyFatPercentage.toString()
-        tv_back_size.text = profile.backSize.toString()
-        tv_chest_size.text = profile.chestSize.toString()
-        tv_arms_size.text = profile.armsSize.toString()
-        tv_waist_size.text = profile.waistSize.toString()
-    }
+    private fun inflate(profile: Profile) =
+            profile.apply {
+                tv_name.text = name
+                tv_description.text = description
+                tv_weight.text = weight.toString()
+                tv_body_fat_percentage.text = bodyFatPercentage.toString()
+                tv_back_size.text = backSize.toString()
+                tv_chest_size.text = chestSize.toString()
+                tv_arms_size.text = armsSize.toString()
+                tv_waist_size.text = waistSize.toString()
+            }
 
     private fun setClickListeners() = btn_edit.setOnClickListener { onEditRequest() }
 
