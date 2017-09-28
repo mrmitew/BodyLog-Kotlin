@@ -30,7 +30,7 @@ class ProfileEditPresenter
 
     override fun bindInternalIntents() {
         super.bindInternalIntents()
-        modelGateways.addAll(Observable.just(LoadProfileIntent())
+        modelGateways.add(Observable.just(LoadProfileIntent())
                 .compose(loadProfileInteractor)
                 .doOnNext { println("[EDIT] [PROFILE MODEL] (${it.hashCode()} : $it") }
                 .subscribe(profileResultStateRelay))

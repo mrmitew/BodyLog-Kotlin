@@ -38,14 +38,9 @@ class LastUpdatedPresenter
         when (resultState) {
             is LoadProfileInteractor.State ->
                 return when (resultState) {
-                    is LoadProfileInteractor.State.InProgress -> // We are not going to indicate we are currently fetching new data,
-                        // nor will replace the old one with something, but we'll just clear the error field (if there was one)
-                        if (previousState.error !== StateError.Empty.INSTANCE)
-                            previousState.copy(error = StateError.Empty.INSTANCE)
-                        else
-                            previousState
+                    is LoadProfileInteractor.State.InProgress -> previousState
 
-                    // No error? Then, just emit the old state. No view state changes needed to be done here.
+                // No error? Then, just emit the old state. No view state changes needed to be done here.
                     is LoadProfileInteractor.State.Successful -> return previousState.copy(
                             lastUpdated = LastUpdatedTextState.Factory.DATE_FORMAT.format(resultState.profile.timestamp),
                             error = StateError.Empty.INSTANCE)
