@@ -18,52 +18,48 @@ abstract class BaseMviPresenter<V : BaseView<S>, S : UiState>(
     /**
      * Have the model gateways been init already
      */
-    private var isInit: Boolean
+    private var isInit: Boolean = false
 
     /**
      * Last emitted state
      */
-    private var lastState: S?
+    private var lastState: S? = null
 
     /**
      * Gateways from views to business logic
      */
-    protected val modelGateways: CompositeDisposable
+    protected val modelGateways: CompositeDisposable = CompositeDisposable()
 
     /**
      * Gateways from business logic to views
      */
-    protected val viewGateways: CompositeDisposable
-
-    init {
-        isInit = false
-        modelGateways = CompositeDisposable()
-        viewGateways = CompositeDisposable()
-        lastState = null
-    }
+    protected val viewGateways: CompositeDisposable = CompositeDisposable()
 
     protected abstract fun createResultStateObservable(uiIntentStream: Observable<UIIntent>): Observable<ResultState>
     protected abstract fun createViewState(previousState: S, resultState: ResultState): S
     protected abstract fun viewIntents(): Observable<UIIntent>
-    protected abstract fun initialState(): S
+    protected abstract val initialState: S
 
     override fun bindIntents() {
-        check(!isDisposed)
-        check(view !is NoOpView)
+        check(!isDisposed, { "Presenter has already been disposed" })
+        check(view !is NoOpView, { "View cannot be No-op" })
+        bindInternalIntentsIfNotInit()
+        viewGateways.add(bindView())
+    }
 
+    private fun bindView() = getUiStateStream()
+            .subscribe({ view.render(it) }, { throw RuntimeException(it) })
+
+    private fun bindInternalIntentsIfNotInit() {
         if (!isInit) {
             bindInternalIntents()
             isInit = true
         }
-
-        viewGateways.add(reduce(viewIntents())
-                .subscribe({ s -> view.render(s) },
-                        { t: Throwable -> throw RuntimeException(t) }))
     }
 
-    override fun unbindIntents() {
-        viewGateways.clear()
-    }
+    private fun getUiStateStream(): Observable<S> = reduce(viewIntents())
+
+    override fun unbindIntents() = viewGateways.clear()
 
     override fun dispose() {
         modelGateways.dispose()
@@ -75,13 +71,13 @@ abstract class BaseMviPresenter<V : BaseView<S>, S : UiState>(
 
     protected open fun bindInternalIntents() {}
 
-    private fun reduce(uiIntentStream: Observable<UIIntent>): Observable<S> {
-        return uiIntentStream
-                .compose<ResultState> { this.createResultStateObservable(it) }
-                .scan<S>(if (lastState == null) initialState() else lastState, { previousState, resultState -> createViewState(previousState, resultState) })
-                .distinctUntilChanged()
-                .doOnNext { state -> lastState = state }
-                .doOnNext { println("[RENDER] $it") }
-    }
+    private fun reduce(uiIntentStream: Observable<UIIntent>): Observable<S> =
+            uiIntentStream
+                    .compose<ResultState> { this.createResultStateObservable(it) }
+                    .scan<S>(lastState ?: initialState, { previousState, resultState -> createViewState(previousState, resultState) })
+                    .distinctUntilChanged()
+                    .doOnNext { state -> lastState = state }
+                    .doOnNext { println("[RENDER] $it") }
+
 
 }

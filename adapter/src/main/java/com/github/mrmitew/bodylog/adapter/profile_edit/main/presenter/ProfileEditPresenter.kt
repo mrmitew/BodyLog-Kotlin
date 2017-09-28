@@ -20,19 +20,13 @@ class ProfileEditPresenter
 @Inject constructor(private val loadProfileInteractor: LoadProfileInteractor,
                     private val saveProfileInteractor: SaveProfileInteractor,
                     private val checkRequiredFieldsInteractor: CheckRequiredFieldsInteractor,
-                    private val profileResultStateRelay: BehaviorRelay<ResultState>)
+                    private val profileResultStateRelay: BehaviorRelay<ResultState>,
+                    override val initialState: ProfileEditState,
+                    override val emptyView: ProfileEditView = ProfileEditView.NoOp())
     : DetachableMviPresenter<ProfileEditView, ProfileEditState>(emptyView) {
-
-    companion object {
-        val emptyView = ProfileEditView.NoOp()
-    }
-
-    override fun getEmptyView(): ProfileEditView = emptyView
 
     override fun viewIntents(): Observable<UIIntent> = Observable.merge(view.getRequiredFieldsFilledInIntent(),
             view.getSaveIntent(), view.getLoadProfileIntent())
-
-    override fun initialState(): ProfileEditState = ProfileEditState.Factory.idle()
 
     override fun bindInternalIntents() {
         super.bindInternalIntents()

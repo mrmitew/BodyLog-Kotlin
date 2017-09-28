@@ -22,16 +22,10 @@ class ProfileDetailsPresenter @Inject constructor(
          * * If the View is not attached, the relays will keep a cached state of a particular result, which
          * will be emitted as soon as the View attaches once again.
          */
-        private val profileResultStateRelay: BehaviorRelay<ResultState>)
+        private val profileResultStateRelay: BehaviorRelay<ResultState>,
+        override val initialState: ProfileDetailsState,
+        override val emptyView: ProfileDetailsView = ProfileDetailsView.NoOp())
     : DetachableMviPresenter<ProfileDetailsView, ProfileDetailsState>(emptyView) {
-
-    companion object {
-        val emptyView = ProfileDetailsView.NoOp()
-    }
-
-    override fun getEmptyView(): ProfileDetailsView = emptyView
-
-    override fun initialState(): ProfileDetailsState = ProfileDetailsState.Factory.inProgress()
 
     override fun viewIntents(): Observable<UIIntent> =
             view.getLoadProfileIntent().cast(UIIntent::class.java)

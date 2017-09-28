@@ -15,17 +15,10 @@ import javax.inject.Inject
 
 class LastUpdatedPresenter
 @Inject constructor(private val loadProfileInteractor: LoadProfileInteractor,
-                    private val profileResultStateRelay: BehaviorRelay<ResultState>) :
+                    private val profileResultStateRelay: BehaviorRelay<ResultState>,
+                    override val initialState: LastUpdatedTextState,
+                    override val emptyView: LastUpdatedView = LastUpdatedView.NoOp()) :
         DetachableMviPresenter<LastUpdatedView, LastUpdatedTextState>(emptyView) {
-
-    companion object {
-        val emptyView = LastUpdatedView.NoOp()
-    }
-
-    override fun getEmptyView(): LastUpdatedView = emptyView
-
-    // TODO: provide as constructor dependency
-    override fun initialState(): LastUpdatedTextState = LastUpdatedTextState.Factory.idle()
 
     override fun viewIntents(): Observable<UIIntent> =
             view.getProfileLastUpdatedIntent().cast(UIIntent::class.java)
