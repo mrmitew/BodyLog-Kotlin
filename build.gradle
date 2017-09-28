@@ -86,7 +86,7 @@ ext.versions = [
 
         // Testing
         junit               : '4.12',
-        mockito             : '2.7.22',
+        mockito             : '2.10.0',
         supportTestRunner   : '1.0.0',
         espresso            : '3.0.0',
         compileTesting      : '0.8',

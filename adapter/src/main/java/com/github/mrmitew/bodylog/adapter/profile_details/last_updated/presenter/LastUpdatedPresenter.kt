@@ -24,6 +24,7 @@ class LastUpdatedPresenter
 
     override fun getEmptyView(): LastUpdatedView = emptyView
 
+    // TODO: provide as constructor dependency
     override fun initialState(): LastUpdatedTextState = LastUpdatedTextState.Factory.idle()
 
     override fun viewIntents(): Observable<UIIntent> =

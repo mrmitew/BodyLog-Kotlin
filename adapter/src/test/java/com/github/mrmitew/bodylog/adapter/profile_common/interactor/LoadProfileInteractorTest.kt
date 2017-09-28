@@ -18,14 +18,14 @@ import org.mockito.junit.MockitoJUnitRunner
 @RunWith(MockitoJUnitRunner::class)
 class LoadProfileInteractorTest {
     @Mock
-    private lateinit var mMockRepository: Repository
-    private lateinit var mLoadProfileInteractor: LoadProfileInteractor
+    private lateinit var mockRepository: Repository
+    private lateinit var loadProfileInteractor: LoadProfileInteractor
 
     @Before
     @Throws(Exception::class)
     fun setUp() {
-        mLoadProfileInteractor =
-                LoadProfileInteractor(ImmediateJobExecutor(), TestPostExecutionThread(), mMockRepository)
+        loadProfileInteractor =
+                LoadProfileInteractor(ImmediateJobExecutor(), TestPostExecutionThread(), mockRepository)
     }
 
     @Test
@@ -33,13 +33,13 @@ class LoadProfileInteractorTest {
         //
         // Arrange
         //
-        `when`(mLoadProfileInteractor.getUseCaseObservable())
+        `when`(loadProfileInteractor.getUseCaseObservable())
                 .thenReturn(Observable.just(mock(Profile::class.java)))
 
         //
         // Act
         //
-        val stateTestObserver = mLoadProfileInteractor.apply(Observable.just(LoadProfileIntent())).test()
+        val stateTestObserver = loadProfileInteractor.apply(Observable.just(LoadProfileIntent())).test()
 
         //
         // Assert
@@ -66,13 +66,13 @@ class LoadProfileInteractorTest {
                 timestamp = System.currentTimeMillis(),
                 empty = false)
 
-        `when`(mLoadProfileInteractor.getUseCaseObservable())
+        `when`(loadProfileInteractor.getUseCaseObservable())
                 .thenReturn(Observable.just(profile))
 
         //
         // Act
         //
-        val stateTestObserver = mLoadProfileInteractor.apply(Observable.just(LoadProfileIntent())).test()
+        val stateTestObserver = loadProfileInteractor.apply(Observable.just(LoadProfileIntent())).test()
 
         val values = stateTestObserver.values()
 
@@ -104,19 +104,19 @@ class LoadProfileInteractorTest {
                 timestamp = System.currentTimeMillis(),
                 empty = false)
 
-        `when`(mLoadProfileInteractor.getUseCaseObservable())
+        `when`(loadProfileInteractor.getUseCaseObservable())
                 .thenReturn(Observable.just(profile))
 
         // We'll emit two profiles to simulate profile update by the business logic, triggered
         // by another entity
-        `when`(mMockRepository.getProfileRefreshing())
+        `when`(mockRepository.getProfileRefreshing())
                 .thenReturn(Observable.range(1, 2)
                         .flatMap { Observable.just(profile) })
 
         //
         // Act
         //
-        val stateTestObserver = mLoadProfileInteractor.apply(Observable.just(LoadProfileIntent())).test()
+        val stateTestObserver = loadProfileInteractor.apply(Observable.just(LoadProfileIntent())).test()
 
         val values = stateTestObserver.values()
 
@@ -138,13 +138,13 @@ class LoadProfileInteractorTest {
         // Arrange
         //
         val expectedError = Throwable("Test")
-        `when`(mLoadProfileInteractor.getUseCaseObservable())
+        `when`(loadProfileInteractor.getUseCaseObservable())
                 .thenReturn(Observable.error(expectedError))
 
         //
         // Act
         //
-        val stateTestObserver = mLoadProfileInteractor.apply(Observable.just(LoadProfileIntent())).test()
+        val stateTestObserver = loadProfileInteractor.apply(Observable.just(LoadProfileIntent())).test()
 
         val values = stateTestObserver.values()
 

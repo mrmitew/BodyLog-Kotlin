@@ -8,7 +8,7 @@ import java.util.*
 data class LastUpdatedTextState(val lastUpdated: String,
                                 val error: Throwable) : UiState() {
     object Factory {
-        const val DEFAULT_VALUE = "n/n"
+        const val DEFAULT_VALUE = "n/a"
         val DATE_FORMAT = SimpleDateFormat("yyyy-MM-dd hh:mm:ss", Locale.US)
 
         fun idle(): LastUpdatedTextState {
