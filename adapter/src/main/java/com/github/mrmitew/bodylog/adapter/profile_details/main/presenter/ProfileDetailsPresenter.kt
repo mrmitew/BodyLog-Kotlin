@@ -10,7 +10,6 @@ import com.github.mrmitew.bodylog.adapter.profile_details.main.model.ProfileDeta
 import com.github.mrmitew.bodylog.adapter.profile_details.main.view.ProfileDetailsView
 import com.jakewharton.rxrelay2.BehaviorRelay
 import io.reactivex.Observable
-import io.reactivex.disposables.Disposable
 import javax.inject.Inject
 
 class ProfileDetailsPresenter @Inject constructor(
@@ -28,7 +27,7 @@ class ProfileDetailsPresenter @Inject constructor(
         override val emptyView: ProfileDetailsView = ProfileDetailsView.NoOp())
     : DetachableMviPresenter<ProfileDetailsView, ProfileDetailsState>(emptyView) {
 
-    override fun internalIntents(): Array<Disposable> =
+    override fun internalIntents() =
             arrayOf(Observable.just(LoadProfileIntent())
                     .compose(loadProfileInteractor)
                     .doOnNext { println("[DETAILS] [PROFILE MODEL] (${it.hashCode()}) : $it") }
@@ -64,6 +63,6 @@ class ProfileDetailsPresenter @Inject constructor(
                 }
         }
 
-        throw IllegalArgumentException("Unknown partial state: " + resultState)
+        throw IllegalArgumentException("Unknown partial state: $resultState")
     }
 }

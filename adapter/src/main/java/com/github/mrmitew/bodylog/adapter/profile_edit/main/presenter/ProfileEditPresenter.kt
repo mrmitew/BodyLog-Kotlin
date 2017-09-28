@@ -14,7 +14,6 @@ import com.github.mrmitew.bodylog.adapter.profile_edit.main.model.ProfileEditSta
 import com.github.mrmitew.bodylog.adapter.profile_edit.main.view.ProfileEditView
 import com.jakewharton.rxrelay2.BehaviorRelay
 import io.reactivex.Observable
-import io.reactivex.disposables.Disposable
 import javax.inject.Inject
 
 class ProfileEditPresenter
@@ -26,7 +25,7 @@ class ProfileEditPresenter
                     override val emptyView: ProfileEditView = ProfileEditView.NoOp())
     : DetachableMviPresenter<ProfileEditView, ProfileEditState>(emptyView) {
 
-    override fun internalIntents(): Array<Disposable> =
+    override fun internalIntents() =
             arrayOf(Observable.just(LoadProfileIntent())
                     .compose(loadProfileInteractor)
                     .doOnNext { println("[EDIT] [PROFILE MODEL] (${it.hashCode()} : $it") }

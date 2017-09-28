@@ -11,7 +11,6 @@ import com.github.mrmitew.bodylog.adapter.profile_details.last_updated.model.Las
 import com.github.mrmitew.bodylog.adapter.profile_details.last_updated.view.LastUpdatedView
 import com.jakewharton.rxrelay2.BehaviorRelay
 import io.reactivex.Observable
-import io.reactivex.disposables.Disposable
 import javax.inject.Inject
 
 class LastUpdatedPresenter
@@ -21,7 +20,7 @@ class LastUpdatedPresenter
                     override val emptyView: LastUpdatedView = LastUpdatedView.NoOp()) :
         DetachableMviPresenter<LastUpdatedView, LastUpdatedTextState>(emptyView) {
 
-    override fun internalIntents(): Array<Disposable> =
+    override fun internalIntents() =
             arrayOf(Observable.just(LoadProfileIntent())
                     .compose(loadProfileInteractor)
                     .doOnNext { println("[LAST_UPDATED] [PROFILE MODEL] (${it.hashCode()}) : $it") }
@@ -52,6 +51,6 @@ class LastUpdatedPresenter
                 }
         }
 
-        throw IllegalArgumentException("Unknown partial state: " + resultState)
+        throw IllegalArgumentException("Unknown partial state: $resultState")
     }
 }
