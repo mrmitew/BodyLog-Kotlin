@@ -146,19 +146,17 @@ class LoadProfileInteractorTest {
         // Act
         //
         val stateTestObserver = loadProfileInteractor.apply(Observable.just(LoadProfileIntent())).test()
-
         val values = stateTestObserver.values()
 
         //
         // Assert
         //
+        // We expect only two states emitted - initial and profile/successful
         assertEquals(2, values.size.toLong())
-
         // Second state should be "error"
         assertEquals(true, values[1] is LoadProfileInteractor.State.Error)
         // Is the error we expect though?
         assertEquals(true, (values[1] as LoadProfileInteractor.State.Error).error == expectedError)
-
         // No stream errors should be emitted
         stateTestObserver.assertNoErrors()
     }
