@@ -1,5 +1,5 @@
 package com.github.mrmitew.bodylog.adapter.profile_common.intent
 
-import com.github.mrmitew.bodylog.adapter.common.model.UIIntent
+import com.github.mrmitew.bodylog.adapter.common.model.ViewIntent
 
-class LoadProfileIntent : UIIntent()
+class LoadProfileIntent : ViewIntent()

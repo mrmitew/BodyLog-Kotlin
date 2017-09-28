@@ -4,6 +4,7 @@ import com.github.mrmitew.bodylog.adapter.common.model.ResultState
 import com.github.mrmitew.bodylog.adapter.profile_common.interactor.CheckRequiredFieldsInteractor
 import com.github.mrmitew.bodylog.adapter.profile_common.interactor.LoadProfileInteractor
 import com.github.mrmitew.bodylog.adapter.profile_edit.main.interactor.SaveProfileInteractor
+import com.github.mrmitew.bodylog.adapter.profile_edit.main.model.ProfileEditState
 import com.github.mrmitew.bodylog.adapter.profile_edit.main.presenter.ProfileEditPresenter
 import com.github.mrmitew.bodylog.framework.di.activity.ActivityComponent
 import com.github.mrmitew.bodylog.framework.di.activity.ActivityComponentBuilder
@@ -29,7 +30,8 @@ interface ProfileEditActivityComponent : ActivityComponent<ProfileEditActivity> 
             return ProfileEditPresenter(loadProfileInteractor = loadProfileInteractor,
                     saveProfileInteractor = saveProfileInteractor,
                     checkRequiredFieldsInteractor = checkRequiredFieldsInteractor,
-                    profileResultStateRelay = BehaviorRelay.create<ResultState>())
+                    profileResultStateRelay = BehaviorRelay.create<ResultState>(),
+                    initialState = ProfileEditState.Factory.idle())
         }
     }
 

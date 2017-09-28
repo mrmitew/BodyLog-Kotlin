@@ -2,7 +2,9 @@ package com.github.mrmitew.bodylog.framework.profile_details.di
 
 import com.github.mrmitew.bodylog.adapter.common.model.ResultState
 import com.github.mrmitew.bodylog.adapter.profile_common.interactor.LoadProfileInteractor
+import com.github.mrmitew.bodylog.adapter.profile_details.last_updated.model.LastUpdatedTextState
 import com.github.mrmitew.bodylog.adapter.profile_details.last_updated.presenter.LastUpdatedPresenter
+import com.github.mrmitew.bodylog.adapter.profile_details.main.model.ProfileDetailsState
 import com.github.mrmitew.bodylog.adapter.profile_details.main.presenter.ProfileDetailsPresenter
 import com.github.mrmitew.bodylog.framework.di.activity.ActivityComponent
 import com.github.mrmitew.bodylog.framework.di.activity.ActivityComponentBuilder
@@ -30,12 +32,12 @@ interface ProfileDetailsActivityComponent : ActivityComponent<ProfileDetailsActi
 
         @Provides
         internal fun providesProfileDetailsPresenter(loadProfileInteractor: LoadProfileInteractor, @Named("loadProfileInteractorRelay") resultStateBehaviorRelay: BehaviorRelay<ResultState>): ProfileDetailsPresenter {
-            return ProfileDetailsPresenter(loadProfileInteractor, resultStateBehaviorRelay)
+            return ProfileDetailsPresenter(loadProfileInteractor, resultStateBehaviorRelay, ProfileDetailsState.Factory.inProgress())
         }
 
         @Provides
         internal fun providesLastUpdatedPresenter(loadProfileInteractor: LoadProfileInteractor, @Named("loadProfileInteractorRelay") resultStateBehaviorRelay: BehaviorRelay<ResultState>): LastUpdatedPresenter {
-            return LastUpdatedPresenter(loadProfileInteractor, resultStateBehaviorRelay)
+            return LastUpdatedPresenter(loadProfileInteractor, resultStateBehaviorRelay, LastUpdatedTextState.Factory.idle())
         }
     }
 
