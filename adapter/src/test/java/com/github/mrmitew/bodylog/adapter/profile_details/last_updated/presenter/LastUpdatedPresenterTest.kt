@@ -32,7 +32,6 @@ class LastUpdatedPresenterTest {
     private lateinit var initialState: LastUpdatedTextState
 
     @Before
-    @Throws(Exception::class)
     fun setUp() {
         loadProfileInteractor =
                 LoadProfileInteractor(threadExecutor = ImmediateJobExecutor(),
@@ -54,10 +53,10 @@ class LastUpdatedPresenterTest {
     @Test
     fun shouldClearError_WhenProfileResultIsSuccessful() {
         // Arrange
-        val errorState = LastUpdatedTextState.Factory.error(mock(Throwable::class.java))
+        val currentState = LastUpdatedTextState.Factory.error(mock(Throwable::class.java))
 
         // Act
-        val newUiState = presenter.createViewState(errorState, LoadProfileInteractor.State.Successful(mock(Profile::class.java)))
+        val newUiState = presenter.createViewState(currentState, resultState = LoadProfileInteractor.State.Successful(mock(Profile::class.java)))
 
         // Assert
         assertTrue(newUiState.error == StateError.Empty.INSTANCE)
@@ -66,10 +65,10 @@ class LastUpdatedPresenterTest {
     @Test
     fun shouldDefaultAndSetErrorState_WhenProfileResultIsError() {
         // Arrange
-        val initialState = LastUpdatedTextState.Factory.success(0L)
+        val currentState = LastUpdatedTextState.Factory.success(0L)
 
         // Act
-        val newUiState = presenter.createViewState(initialState, LoadProfileInteractor.State.Error(error))
+        val newUiState = presenter.createViewState(currentState, resultState = LoadProfileInteractor.State.Error(error))
 
         // Assert
         assertTrue(newUiState.error == error)
@@ -79,25 +78,27 @@ class LastUpdatedPresenterTest {
     @Test
     fun shouldReturnPreviousState_WhenProfileResultIsInProgress_AndPreviosStateHasNoError() {
         // Arrange
-        val initialState = LastUpdatedTextState.Factory.success(0L)
+        val currentState = LastUpdatedTextState.Factory.success(0L)
 
         // Act
-        val newUiState = presenter.createViewState(initialState, LoadProfileInteractor.State.InProgress())
+        val newUiState = presenter.createViewState(currentState, resultState = LoadProfileInteractor.State.InProgress())
 
         // Assert
-        assertTrue(newUiState == initialState)
+        assertTrue(currentState == newUiState)
+        assertTrue(currentState.hashCode() == newUiState.hashCode())
     }
 
     @Test
     fun shouldReturnPreviousState_WhenProfileResultIsInProgress_AndPreviosStateHasError() {
         // Arrange
-        val initialState = LastUpdatedTextState.Factory.error(error)
+        val currentState = LastUpdatedTextState.Factory.error(error)
 
         // Act
-        val newUiState = presenter.createViewState(initialState, LoadProfileInteractor.State.InProgress())
+        val newUiState = presenter.createViewState(currentState, resultState = LoadProfileInteractor.State.InProgress())
 
         // Assert
-        assertTrue(newUiState == initialState)
+        assertTrue(currentState == newUiState)
+        assertTrue(currentState.hashCode() == newUiState.hashCode())
     }
 
     private fun detachView() {
