@@ -1,5 +1,8 @@
 package com.github.mrmitew.bodylog.domain.repository.entity
 
+import com.github.mrmitew.bodylog.domain.common.Empty
+
+@Deprecated("Profile will contain only name and description. The rest of the properties will be represented by separate entities")
 data class Profile(val name: String,
                    val description: String,
                    val weight: Float,
@@ -22,4 +25,8 @@ data class Profile(val name: String,
                 armsSize = 0f,
                 waistSize = 0f)
     }
+}
+
+open class UserProfile(val name: String, val description: String) {
+    class Void : UserProfile(name = "", description = ""), Empty
 }
