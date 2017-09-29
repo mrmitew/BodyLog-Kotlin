@@ -13,14 +13,14 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".framework.profile_details.main.view.ProfileDetailsActivity">
+        <activity android:name="com.github.mrmitew.bodylog.framework.profile.details.view.ProfileDetailsActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
 
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
-        <activity android:name=".framework.profile_edit.main.view.ProfileEditActivity">
+        <activity android:name="com.github.mrmitew.bodylog.framework.profile.edit.view.ProfileEditActivity">
         </activity>
     </application>
 
