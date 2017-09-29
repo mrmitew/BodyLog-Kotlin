@@ -16,7 +16,18 @@ interface Repository {
 
     fun userProfile(): Observable<UserProfile>
     fun userProfileRefreshing(): Observable<UserProfile>
+
+    @Deprecated("Use updateUserProfile()")
     fun updateProfile(profile: Profile): Completable
+
+    fun updateUserProfile(userProfile: UserProfile): Completable
+
     fun logWeight(weightLog: Log.Weight): Completable
     fun logMeasurement(bodyMeasurementLog: Log.Measurement): Completable
+
+    fun weightLog(): Observable<List<Log.Weight>>
+    fun weightLogRefreshing(): Observable<List<Log.Weight>>
+
+    fun measurementLog(): Observable<List<Log.Measurement>>
+    fun measurementLogRefreshing(): Observable<List<Log.Measurement>>
 }
