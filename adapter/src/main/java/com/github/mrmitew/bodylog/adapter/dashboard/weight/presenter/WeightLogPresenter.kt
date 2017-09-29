@@ -5,16 +5,16 @@ import com.github.mrmitew.bodylog.adapter.common.model.ViewIntent
 import com.github.mrmitew.bodylog.adapter.common.presenter.DetachableMviPresenter
 import com.github.mrmitew.bodylog.adapter.dashboard.weight.intent.LoadWeightLogIntent
 import com.github.mrmitew.bodylog.adapter.dashboard.weight.interactor.LoadWeightLogInteractor
-import com.github.mrmitew.bodylog.adapter.dashboard.weight.view.WeightLogGraphView
+import com.github.mrmitew.bodylog.adapter.dashboard.weight.view.WeightLogView
 import io.reactivex.Observable
 import javax.inject.Inject
 
-class WeightLogGraphPresenter @Inject constructor(
+class WeightLogPresenter @Inject constructor(
         // Loads a profile from the repository
         private val loadWeightLogInteractor: LoadWeightLogInteractor,
-        override val initialState: WeightLogGraphView.State = WeightLogGraphView.State.Factory.idle(),
-        override val emptyView: WeightLogGraphView = WeightLogGraphView.NoOp())
-    : DetachableMviPresenter<WeightLogGraphView, WeightLogGraphView.State>(emptyView) {
+        override val initialState: WeightLogView.State = WeightLogView.State.Factory.idle(),
+        override val emptyView: WeightLogView = WeightLogView.NoOp())
+    : DetachableMviPresenter<WeightLogView, WeightLogView.State>(emptyView) {
 
     override fun viewIntentStream(): Observable<ViewIntent> =
             view.loadWeightLogIntent().cast(ViewIntent::class.java)
@@ -24,7 +24,7 @@ class WeightLogGraphPresenter @Inject constructor(
                 shared.ofType(LoadWeightLogIntent::class.java).compose(loadWeightLogInteractor).cast(ResultState::class.java)
             }
 
-    override fun viewState(previousState: WeightLogGraphView.State, resultState: ResultState): WeightLogGraphView.State {
+    override fun viewState(previousState: WeightLogView.State, resultState: ResultState): WeightLogView.State {
         when (resultState) {
         // TODO
         }

@@ -8,7 +8,7 @@ import com.github.mrmitew.bodylog.adapter.dashboard.weight.intent.LoadWeightLogI
 import com.github.mrmitew.bodylog.domain.repository.entity.Log
 import io.reactivex.Observable
 
-interface WeightLogGraphView : BaseView<WeightLogGraphView.State> {
+interface WeightLogView : BaseView<WeightLogView.State> {
     data class State(val weightLogList: List<Log.Weight>,
                      val inProgress: Boolean,
                      val loadSuccessful: Boolean,
@@ -21,7 +21,7 @@ interface WeightLogGraphView : BaseView<WeightLogGraphView.State> {
         }
     }
 
-    class NoOp : WeightLogGraphView, NoOpView {
+    class NoOp : WeightLogView, NoOpView {
         override fun render(state: State) {
             // no-op
         }
