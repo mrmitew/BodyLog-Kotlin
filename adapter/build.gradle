@@ -35,6 +35,7 @@ dependencies {
     // Testing
     testCompile "junit:junit:$versions.junit"
     testCompile "org.mockito:mockito-core:$versions.mockito"
+    testCompile "com.nhaarman:mockito-kotlin:$versions.mockitoKotlin"
 }
 
 compileKotlin {

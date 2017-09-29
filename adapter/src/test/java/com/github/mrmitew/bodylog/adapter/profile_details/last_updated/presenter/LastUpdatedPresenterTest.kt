@@ -93,9 +93,9 @@ class LastUpdatedPresenterTest {
 
         val resultStateStream = presenter.resultStateStream(viewIntentStream)
         val resultStreamObserver = resultStateStream.test()
-        val resultState = resultStreamObserver.values()[0]
 
         //
+        val resultState = resultStreamObserver.values()[0]
         // Assert
         //
         assertTrue(resultStreamObserver.valueCount() == 1)
@@ -123,7 +123,7 @@ class LastUpdatedPresenterTest {
         //
         // Assert
         //
-        assertTrue(newUiState.error is Error.Empty)
+        assertTrue(newUiState.error == Error.Empty.INSTANCE)
     }
 
     @Test
