@@ -7,7 +7,7 @@ import com.github.mrmitew.bodylog.domain.repository.entity.Profile
 data class ProfileDetailsState(val profile: Profile,
                                val inProgress: Boolean,
                                val loadSuccessful: Boolean,
-                               val loadError: Throwable) : ViewState() {
+                               val loadError: Throwable) : ViewState {
     object Factory {
         fun inProgress(): ProfileDetailsState =
                 ProfileDetailsState(profile = Profile.Factory.EMPTY,

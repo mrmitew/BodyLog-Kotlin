@@ -12,7 +12,7 @@ data class ProfileEditState(
         val saveError: Throwable,
         val requiredFieldsFilledIn: Boolean,
         val requiredFieldsError: Throwable,
-        val profile: Profile) : ViewState() {
+        val profile: Profile) : ViewState {
 
     object Factory {
         fun idle(): ProfileEditState = ProfileEditState(
