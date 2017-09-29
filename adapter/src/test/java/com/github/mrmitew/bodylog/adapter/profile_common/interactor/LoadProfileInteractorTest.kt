@@ -6,7 +6,6 @@ import com.github.mrmitew.bodylog.domain.executor.TestPostExecutionThread
 import com.github.mrmitew.bodylog.domain.repository.Repository
 import com.github.mrmitew.bodylog.domain.repository.entity.Profile
 import io.reactivex.Observable
-import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -44,10 +43,10 @@ class LoadProfileInteractorTest {
         //
         // Assert
         //
-        assertEquals(true, stateTestObserver.values()[0] is LoadProfileInteractor.State.InProgress)
-
-        // No errors should be emitted
-        stateTestObserver.assertNoErrors()
+        stateTestObserver
+                .assertValueCount(2)
+                .assertValueAt(0, { it is LoadProfileInteractor.State.InProgress })
+                .assertNoErrors()
     }
 
     @Test
@@ -75,17 +74,14 @@ class LoadProfileInteractorTest {
         //
         val stateTestObserver = loadProfileInteractor.apply(Observable.just(LoadProfileIntent())).test()
 
-        val values = stateTestObserver.values()
-
         //
         // Assert
         //
-        assertEquals(2, values.size.toLong())
-        assertEquals(true, values[0] is LoadProfileInteractor.State.InProgress)
-        assertEquals(true, values[1] is LoadProfileInteractor.State.Successful)
-
-        // No errors should be emitted
-        stateTestObserver.assertNoErrors()
+        stateTestObserver
+                .assertValueCount(2)
+                .assertValueAt(0, { it is LoadProfileInteractor.State.InProgress })
+                .assertValueAt(1, { it is LoadProfileInteractor.State.Successful })
+                .assertNoErrors()
     }
 
     @Test
@@ -119,18 +115,15 @@ class LoadProfileInteractorTest {
         //
         val stateTestObserver = loadProfileInteractor.apply(Observable.just(LoadProfileIntent())).test()
 
-        val values = stateTestObserver.values()
-
         //
         // Assert
         //
-        assertEquals(3, values.size.toLong())
-        assertEquals(true, values[0] is LoadProfileInteractor.State.InProgress)
-        assertEquals(true, values[1] is LoadProfileInteractor.State.Successful)
-        assertEquals(true, values[2] is LoadProfileInteractor.State.Successful)
-
-        // No errors should be emitted
-        stateTestObserver.assertNoErrors()
+        stateTestObserver
+                .assertValueCount(3)
+                .assertValueAt(0, { it is LoadProfileInteractor.State.InProgress })
+                .assertValueAt(1, { it is LoadProfileInteractor.State.Successful })
+                .assertValueAt(2, { it is LoadProfileInteractor.State.Successful })
+                .assertNoErrors()
     }
 
     @Test
@@ -146,18 +139,18 @@ class LoadProfileInteractorTest {
         // Act
         //
         val stateTestObserver = loadProfileInteractor.apply(Observable.just(LoadProfileIntent())).test()
-        val values = stateTestObserver.values()
 
         //
         // Assert
         //
-        // We expect only two states emitted - initial and profile/successful
-        assertEquals(2, values.size.toLong())
-        // Second state should be "error"
-        assertEquals(true, values[1] is LoadProfileInteractor.State.Error)
-        // Is the error we expect though?
-        assertEquals(true, (values[1] as LoadProfileInteractor.State.Error).error == expectedError)
-        // No stream errors should be emitted
-        stateTestObserver.assertNoErrors()
+        stateTestObserver
+                // We expect only two states emitted - initial and profile/successful
+                .assertValueCount(2)
+                // Second state should be "error"
+                .assertValueAt(1, { it is LoadProfileInteractor.State.Error })
+                // Is the error we expect though?
+                .assertValueAt(1, { state -> if (state is LoadProfileInteractor.State.Error) state.error == expectedError else false })
+                // No stream errors should be emitted
+                .assertNoErrors()
     }
 }

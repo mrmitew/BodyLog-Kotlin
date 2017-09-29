@@ -61,14 +61,15 @@ class LastUpdatedPresenterTest {
         // Emit a result state for a profile request, just like as if it was from the repository
         profileResultStateRelay.accept(LoadProfileInteractor.State.Successful(expectedProfile))
         val resultStreamObserver = resultStateStream.test()
-        val resultState = resultStreamObserver.values()[0]
 
         //
         // Assert
         //
-        assertTrue(resultStreamObserver.valueCount() == 1)
-        assertTrue(resultState is LoadProfileInteractor.State.Successful)
-        assertTrue((resultState as LoadProfileInteractor.State.Successful).profile == expectedProfile)
+        resultStreamObserver
+                .assertValueCount(1)
+                .assertValueAt(0, { it is LoadProfileInteractor.State.Successful })
+                .assertValueAt(0, { state -> if (state is LoadProfileInteractor.State.Successful) state.profile == expectedProfile else false })
+                .assertNoErrors()
     }
 
     // Integration between LoadProfileInteractor and presenter
@@ -95,12 +96,13 @@ class LastUpdatedPresenterTest {
         val resultStreamObserver = resultStateStream.test()
 
         //
-        val resultState = resultStreamObserver.values()[0]
         // Assert
         //
-        assertTrue(resultStreamObserver.valueCount() == 1)
-        assertTrue(resultState is LoadProfileInteractor.State.Successful)
-        assertTrue((resultState as LoadProfileInteractor.State.Successful).profile == expectedProfile)
+        resultStreamObserver
+                .assertValueCount(1)
+                .assertValueAt(0, { it is LoadProfileInteractor.State.Successful })
+                .assertValueAt(0, { state -> if (state is LoadProfileInteractor.State.Successful) state.profile == expectedProfile else false })
+                .assertNoErrors()
 
         //
         // Act: Clean up
