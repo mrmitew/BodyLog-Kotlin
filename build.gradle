@@ -38,7 +38,7 @@ ext.versions = [
         kotlin              : "$kotlin_version",
 
         // UI libs
-        butterknife         : '8.5.1',
+        mpAndroidChart      : '3.0.2',
         constraintLayout    : '1.0.2',
         glide               : '4.0.0-RC0',
 

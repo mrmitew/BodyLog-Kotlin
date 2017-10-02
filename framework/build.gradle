@@ -5,6 +5,7 @@ plugins {
 repositories {
     mavenCentral()
     maven { url "https://clojars.org/repo/" }
+    maven { url "https://jitpack.io" }
 }
 
 apply plugin: 'com.android.application'
@@ -111,6 +112,7 @@ dependencies {
     // UI libs
     implementation "com.android.support:appcompat-v7:$versions.supportLibs"
     implementation "com.android.support:design:$versions.supportLibs"
+    implementation "com.github.PhilJay:MPAndroidChart:v$versions.mpAndroidChart"
 
     // Reactive
     implementation "io.reactivex.rxjava2:rxjava:$versions.rxJava2"

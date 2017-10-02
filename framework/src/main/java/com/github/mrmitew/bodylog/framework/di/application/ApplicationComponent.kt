@@ -1,6 +1,7 @@
 package com.github.mrmitew.bodylog.framework.di.application
 
 import com.github.mrmitew.bodylog.framework.AndroidApplication
+import com.github.mrmitew.bodylog.framework.dashboard.di.DashboardActivityComponent
 import com.github.mrmitew.bodylog.framework.di.presenter.PresenterHolderInjector
 import com.github.mrmitew.bodylog.framework.profile.details.di.ProfileDetailsActivityComponent
 import com.github.mrmitew.bodylog.framework.profile.edit.di.ProfileEditActivityComponent
@@ -12,6 +13,7 @@ import javax.inject.Singleton
 @Component(modules = arrayOf(ApplicationModule::class,
         ActivityBindingModule::class,
         RepositoryModule::class,
+        DashboardActivityComponent.PresenterModule::class,
         ProfileDetailsActivityComponent.PresenterModule::class,
         ProfileEditActivityComponent.PresenterModule::class))
 interface ApplicationComponent : PresenterHolderInjector {

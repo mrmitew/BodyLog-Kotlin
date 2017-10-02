@@ -31,11 +31,12 @@ class InMemoryRepository : Repository {
     private var cachedUserProfile = UserProfile(name = "John Doe",
             description = "With hard work you can achieve your goals and you can become successful!")
     private val cachedWeightLogList: MutableList<Log.Weight> = arrayListOf(
-            Log.Weight(60f, 10.0f, 0),
-            Log.Weight(62f, 10.1f, 1),
-            Log.Weight(65f, 10.0f, 10),
-            Log.Weight(70f, 11.0f, 20),
-            Log.Weight(68f, 8.0f, 30)
+            Log.Weight(70f, 10.0f, TimeUnit.MILLISECONDS.toHours(1506780731000L)),
+            Log.Weight(70.5f, 10.1f, TimeUnit.MILLISECONDS.toHours(1506902400000L)),
+            Log.Weight(71f, 10.0f, TimeUnit.MILLISECONDS.toHours(1506988800000L)),
+            Log.Weight(71.2f, 11.0f, TimeUnit.MILLISECONDS.toHours(1507075200000L)),
+            Log.Weight(71.0f, 8.0f, TimeUnit.MILLISECONDS.toHours(1507161600000L)),
+            Log.Weight(71.4f, 8.0f, TimeUnit.MILLISECONDS.toHours(1509372731000L))
     )
     private val cachedMeasurementLogList: MutableList<Log.Measurement> = arrayListOf(
             Log.Measurement(backSize = 120f,

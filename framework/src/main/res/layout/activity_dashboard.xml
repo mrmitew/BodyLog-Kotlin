@@ -12,6 +12,10 @@
         app:titleTextColor="@color/colorPrimary"/>
 
     <!--TODO: add custom views-->
+    <com.github.mrmitew.bodylog.framework.weight.view.WeightLogLineChart
+        android:layout_width="match_parent"
+        android:layout_height="160dp"
+        android:layout_marginTop="?attr/actionBarSize"/>
 
     <android.support.design.widget.FloatingActionButton
         android:layout_width="wrap_content"
