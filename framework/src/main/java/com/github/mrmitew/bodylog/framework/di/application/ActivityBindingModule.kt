@@ -1,5 +1,7 @@
 package com.github.mrmitew.bodylog.framework.di.application
 
+import com.github.mrmitew.bodylog.framework.dashboard.di.DashboardActivityComponent
+import com.github.mrmitew.bodylog.framework.dashboard.view.DashboardActivity
 import com.github.mrmitew.bodylog.framework.di.activity.ActivityComponentBuilder
 import com.github.mrmitew.bodylog.framework.di.activity.ActivityKey
 import com.github.mrmitew.bodylog.framework.profile.details.di.ProfileDetailsActivityComponent
@@ -14,8 +16,15 @@ import dagger.multibindings.IntoMap
 /**
  * All components defined here will become subcomponents of the parent component - ApplicationComponent
  */
-@Module(subcomponents = arrayOf(ProfileDetailsActivityComponent::class, ProfileEditActivityComponent::class))
+@Module(subcomponents = arrayOf(DashboardActivityComponent::class,
+        ProfileDetailsActivityComponent::class,
+        ProfileEditActivityComponent::class))
 internal abstract class ActivityBindingModule {
+    @Binds
+    @IntoMap
+    @ActivityKey(DashboardActivity::class)
+    abstract fun dashboardActivityComponentComponentBuilder(impl: DashboardActivityComponent.Builder): ActivityComponentBuilder<*, *>
+
     @Binds
     @IntoMap
     @ActivityKey(ProfileDetailsActivity::class)

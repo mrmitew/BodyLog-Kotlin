@@ -110,6 +110,7 @@ dependencies {
 
     // UI libs
     implementation "com.android.support:appcompat-v7:$versions.supportLibs"
+    implementation "com.android.support:design:$versions.supportLibs"
 
     // Reactive
     implementation "io.reactivex.rxjava2:rxjava:$versions.rxJava2"
