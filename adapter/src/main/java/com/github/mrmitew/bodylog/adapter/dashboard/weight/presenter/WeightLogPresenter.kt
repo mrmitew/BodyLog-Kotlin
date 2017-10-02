@@ -10,9 +10,8 @@ import io.reactivex.Observable
 import javax.inject.Inject
 
 class WeightLogPresenter @Inject constructor(
-        // Loads a profile from the repository
         private val loadWeightLogInteractor: LoadWeightLogInteractor,
-        override val initialState: WeightLogView.State = WeightLogView.State.Factory.idle(),
+        override val initialState: WeightLogView.State = WeightLogView.State.Factory.default(),
         override val emptyView: WeightLogView = WeightLogView.NoOp())
     : DetachableMviPresenter<WeightLogView, WeightLogView.State>(emptyView) {
 
@@ -26,9 +25,20 @@ class WeightLogPresenter @Inject constructor(
 
     override fun viewState(previousState: WeightLogView.State, resultState: ResultState): WeightLogView.State {
         when (resultState) {
-        // TODO
+            is LoadWeightLogInteractor.State ->
+                return when (resultState) {
+                    is LoadWeightLogInteractor.State.InProgress -> previousState.copy(inProgress = true)
+                    is LoadWeightLogInteractor.State.Successful ->
+                        previousState.copy(inProgress = false,
+                                loadSuccessful = true,
+                                weightLogList = previousState.weightLogList.toMutableList()
+                                        .apply { addAll(resultState.weightLogList) })
+                    is LoadWeightLogInteractor.State.Error -> previousState.copy(inProgress = false,
+                            loadSuccessful = false,
+                            loadError = resultState.error)
+                }
         }
 
-        throw IllegalArgumentException("Unknown partial state: $resultState")
+        throw IllegalArgumentException("Unknown result state: $resultState")
     }
 }

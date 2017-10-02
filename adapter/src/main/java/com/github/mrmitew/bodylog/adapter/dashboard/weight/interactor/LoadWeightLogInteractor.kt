@@ -31,7 +31,7 @@ class LoadWeightLogInteractor @Inject constructor(private val threadExecutor: Th
                     .observeOn(postExecutionThread.scheduler())
 
     internal fun getUseCaseObservable(): Observable<List<Log.Weight>> =
-            repository.weightLog()
+            repository.weightLogRefreshing()
 
     private fun buildUseCaseObservable(): Observable<List<Log.Weight>> =
             getUseCaseObservable()
