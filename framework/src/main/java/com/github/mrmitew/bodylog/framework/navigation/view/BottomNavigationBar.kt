@@ -24,21 +24,22 @@ class BottomNavigationBar : BottomNavigationView, ProfileDetailsView {
         // However, if need to add more reactive functionality, specifically for the navigation menu,
         // then we'll need to create a separate presenter, which will re-use/hook to the LoadProfileInteractor
         @Inject override lateinit var presenter: ProfileDetailsPresenter
+
         override fun injectMembers(injector: PresenterHolderInjector) = injector.inject(this)
     }
 
     private lateinit var presenterHolder: BasePresenterHolder<ProfileDetailsView, ProfileDetailsState>
 
     constructor(context: Context) : super(context) {
-        presenterInit()
+        init()
     }
 
     constructor(context: Context, attrs: AttributeSet) : super(context, attrs) {
-        presenterInit()
+        init()
     }
 
     constructor(context: Context, attrs: AttributeSet, defStyleAttr: Int) : super(context, attrs, defStyleAttr) {
-        presenterInit()
+        init()
     }
 
     override fun render(state: ProfileDetailsState) {
@@ -55,8 +56,12 @@ class BottomNavigationBar : BottomNavigationView, ProfileDetailsView {
             = Observable.just(LoadProfileIntent())
 
 
-    private fun presenterInit() {
+    private fun init() {
         inflateMenu(R.menu.dashboard_bottom_navigation)
+        presenterInit()
+    }
+
+    private fun presenterInit() {
         if (!isInEditMode) {
             setPresenterHolder()
         }
