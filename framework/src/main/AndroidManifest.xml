@@ -13,7 +13,7 @@
         <activity android:name="com.github.mrmitew.bodylog.framework.profile.details.view.ProfileDetailsActivity"/>
         <activity android:name="com.github.mrmitew.bodylog.framework.profile.edit.view.ProfileEditActivity">
         </activity>
-        <activity android:name=".framework.dashboard.view.DashboardActivity">
+        <activity android:name=".framework.main.view.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
 

@@ -13,8 +13,11 @@
         app:title="body log"
         app:titleTextColor="@color/colorPrimary"/>
 
-    <include
-        layout="@layout/activity_dashboard_content"/>
+    <android.support.v4.view.ViewPager
+        android:id="@+id/viewPager"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="?attr/actionBarSize"/>
 
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/fab"
@@ -27,7 +30,7 @@
         app:fabSize="normal"/>
 
     <android.support.design.widget.BottomNavigationView
-        android:id="@+id/dashboard_bottom_navigation"
+        android:id="@+id/main_bottom_navigation"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|end"

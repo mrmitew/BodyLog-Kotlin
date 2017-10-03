@@ -5,13 +5,12 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:showIn="@layout/activity_dashboard">
+    tools:showIn="@layout/fragment_dashboard">
 
     <com.github.mrmitew.bodylog.framework.weight.view.WeightLogLayout
         android:id="@+id/ll_weight_log"
         android:layout_width="match_parent"
-        android:layout_height="160dp"
-        android:layout_marginTop="?attr/actionBarSize"/>
+        android:layout_height="160dp"/>
 
     <com.github.mrmitew.bodylog.framework.measurement.view.MeasurementLogLayout
         android:id="@+id/ll_measurements"

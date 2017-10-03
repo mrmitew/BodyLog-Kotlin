@@ -1,6 +1,10 @@
-package com.github.mrmitew.bodylog.framework.profile.details.di
+package com.github.mrmitew.bodylog.framework.main.di
 
 import com.github.mrmitew.bodylog.adapter.common.model.ResultState
+import com.github.mrmitew.bodylog.adapter.dashboard.measurement.interactor.LoadMeasurementLogInteractor
+import com.github.mrmitew.bodylog.adapter.dashboard.measurement.presenter.MeasurementLogPresenter
+import com.github.mrmitew.bodylog.adapter.dashboard.weight.interactor.LoadWeightLogInteractor
+import com.github.mrmitew.bodylog.adapter.dashboard.weight.presenter.WeightLogPresenter
 import com.github.mrmitew.bodylog.adapter.profile.common.interactor.LoadProfileInteractor
 import com.github.mrmitew.bodylog.adapter.profile.details.last_updated.model.LastUpdatedTextState
 import com.github.mrmitew.bodylog.adapter.profile.details.last_updated.presenter.LastUpdatedPresenter
@@ -10,7 +14,7 @@ import com.github.mrmitew.bodylog.framework.di.activity.ActivityComponent
 import com.github.mrmitew.bodylog.framework.di.activity.ActivityComponentBuilder
 import com.github.mrmitew.bodylog.framework.di.activity.ActivityModule
 import com.github.mrmitew.bodylog.framework.di.activity.ActivityScope
-import com.github.mrmitew.bodylog.framework.profile.details.view.ProfileDetailsActivity
+import com.github.mrmitew.bodylog.framework.main.view.MainActivity
 import com.jakewharton.rxrelay2.BehaviorRelay
 import dagger.Module
 import dagger.Provides
@@ -19,11 +23,25 @@ import javax.inject.Named
 import javax.inject.Singleton
 
 @ActivityScope
-@Subcomponent(modules = arrayOf(ProfileDetailsActivityComponent.ComponentModule::class))
-interface ProfileDetailsActivityComponent : ActivityComponent<ProfileDetailsActivity> {
+@Subcomponent(modules = arrayOf(MainActivityComponent.ComponentModule::class))
+interface MainActivityComponent : ActivityComponent<MainActivity> {
     @Singleton
     @Module
     class PresenterModule {
+        /**
+         * Dashboard
+         */
+        @Provides
+        internal fun providesWeightLogPresenter(loadWeightLogInteractor: LoadWeightLogInteractor) =
+                WeightLogPresenter(loadWeightLogInteractor)
+
+        @Provides
+        internal fun providesMeasurementLogPresenter(loadMeasurementLogInteractor: LoadMeasurementLogInteractor) =
+                MeasurementLogPresenter(loadMeasurementLogInteractor)
+
+        /**
+         * Profile details
+         */
         @Provides
         @Named("loadProfileInteractorRelay")
         internal fun providesLoadProfileInteractorRelay(): BehaviorRelay<ResultState> {
@@ -42,9 +60,9 @@ interface ProfileDetailsActivityComponent : ActivityComponent<ProfileDetailsActi
     }
 
     @Subcomponent.Builder
-    interface Builder : ActivityComponentBuilder<ComponentModule, ProfileDetailsActivityComponent>
+    interface Builder : ActivityComponentBuilder<ComponentModule, MainActivityComponent>
 
     @ActivityScope
     @Module
-    class ComponentModule(activity: ProfileDetailsActivity) : ActivityModule<ProfileDetailsActivity>(activity)
+    class ComponentModule(activity: MainActivity) : ActivityModule<MainActivity>(activity)
 }
