@@ -8,12 +8,10 @@ import android.view.MotionEvent
 class NonSwipeableViewPager : ViewPager {
     var swipeEnabled: Boolean
 
-    constructor(context: Context) : super(context) {
-        swipeEnabled = false
-    }
+    constructor(context: Context) : this(context = context, swipeEnabled = false)
 
-    constructor(context: Context, enabled: Boolean) : super(context) {
-        swipeEnabled = enabled
+    constructor(context: Context, swipeEnabled: Boolean) : super(context) {
+        this.swipeEnabled = swipeEnabled
     }
 
     constructor(context: Context, attrs: AttributeSet) : super(context, attrs) {
