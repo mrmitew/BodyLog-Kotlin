@@ -18,17 +18,9 @@ class NonSwipeableViewPager : ViewPager {
         swipeEnabled = false
     }
 
-    override fun onTouchEvent(event: MotionEvent): Boolean {
-        if (swipeEnabled) {
-            return super.onTouchEvent(event)
-        }
-        return false
-    }
+    override fun onTouchEvent(event: MotionEvent): Boolean =
+            if (swipeEnabled) super.onTouchEvent(event) else false
 
-    override fun onInterceptTouchEvent(event: MotionEvent): Boolean {
-        if (swipeEnabled) {
-            return super.onInterceptTouchEvent(event)
-        }
-        return false
-    }
+    override fun onInterceptTouchEvent(event: MotionEvent): Boolean =
+            if (swipeEnabled) super.onInterceptTouchEvent(event) else false
 }
