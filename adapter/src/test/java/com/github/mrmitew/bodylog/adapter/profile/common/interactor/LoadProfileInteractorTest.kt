@@ -56,15 +56,7 @@ class LoadProfileInteractorTest {
         //
         val profile = Profile(
                 name = "Test",
-                description = "Test",
-                weight = 0f,
-                bodyFatPercentage = 0f,
-                backSize = 0f,
-                chestSize = 0f,
-                armsSize = 0f,
-                waistSize = 0f,
-                timestamp = System.currentTimeMillis(),
-                empty = false)
+                description = "Test")
 
         `when`(loadProfileInteractor.getUseCaseObservable())
                 .thenReturn(Observable.just(profile))
@@ -91,22 +83,14 @@ class LoadProfileInteractorTest {
         //
         val profile = Profile(
                 name = "Test",
-                description = "Test",
-                weight = 0f,
-                bodyFatPercentage = 0f,
-                backSize = 0f,
-                chestSize = 0f,
-                armsSize = 0f,
-                waistSize = 0f,
-                timestamp = System.currentTimeMillis(),
-                empty = false)
+                description = "Test")
 
         `when`(loadProfileInteractor.getUseCaseObservable())
                 .thenReturn(Observable.just(profile))
 
         // We'll emit two profiles to simulate profile update by the business logic, triggered
         // by another entity
-        `when`(mockRepository.getProfileRefreshing())
+        `when`(mockRepository.userProfileRefreshing())
                 .thenReturn(Observable.range(1, 2)
                         .flatMap { Observable.just(profile) })
 

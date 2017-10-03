@@ -31,7 +31,7 @@ class SaveProfileInteractor @Inject constructor(private val threadExecutor: Thre
                     .observeOn(postExecutionThread.scheduler())
 
     internal fun getUseCaseObservable(profile: Profile): Observable<Profile> =
-            repository.updateProfile(profile)
+            repository.updateUserProfile(profile)
                     .toObservable<Profile>()
                     .startWith(profile)
 

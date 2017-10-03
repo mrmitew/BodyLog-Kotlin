@@ -69,12 +69,6 @@ class ProfileDetailsFragment : BasePresentableFragment<ProfileDetailsView, Profi
             profile.apply {
                 tv_name.text = name
                 tv_description.text = description
-                tv_weight.text = weight.toString()
-                tv_body_fat_percentage.text = bodyFatPercentage.toString()
-                tv_back_size.text = backSize.toString()
-                tv_chest_size.text = chestSize.toString()
-                tv_arms_size.text = armsSize.toString()
-                tv_waist_size.text = waistSize.toString()
             }
 
     private fun setClickListeners() = btn_edit.setOnClickListener { onEditRequest() }

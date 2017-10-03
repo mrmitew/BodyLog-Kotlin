@@ -82,13 +82,7 @@ class ProfileEditActivity : BasePresentableActivity<ProfileEditView, ProfileEdit
                     .map {
                         SaveProfileIntent(Profile(
                                 name = et_name.text.toString(),
-                                description = et_description.text.toString(),
-                                weight = et_weight.text.toString().toFloat(),
-                                bodyFatPercentage = et_body_fat_percentage.text.toString().toFloat(),
-                                armsSize = et_arms_size.text.toString().toFloat(),
-                                backSize = et_back_size.text.toString().toFloat(),
-                                chestSize = et_chest_size.text.toString().toFloat(),
-                                waistSize = et_waist_size.text.toString().toFloat()))
+                                description = et_description.text.toString()))
                     }
 
     override fun requiredFieldsFilledInIntent(): Observable<CheckRequiredFieldsIntent> =
@@ -113,11 +107,5 @@ class ProfileEditActivity : BasePresentableActivity<ProfileEditView, ProfileEdit
             profile.apply {
                 et_name.setText(name)
                 et_description.setText(description)
-                et_weight.setText(weight.toString())
-                et_body_fat_percentage.setText(bodyFatPercentage.toString())
-                et_back_size.setText(backSize.toString())
-                et_chest_size.setText(chestSize.toString())
-                et_arms_size.setText(armsSize.toString())
-                et_waist_size.setText(waistSize.toString())
             }
 }

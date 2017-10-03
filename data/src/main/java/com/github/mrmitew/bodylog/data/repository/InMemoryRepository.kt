@@ -3,32 +3,16 @@ package com.github.mrmitew.bodylog.data.repository
 import com.github.mrmitew.bodylog.domain.repository.Repository
 import com.github.mrmitew.bodylog.domain.repository.entity.Log
 import com.github.mrmitew.bodylog.domain.repository.entity.Profile
-import com.github.mrmitew.bodylog.domain.repository.entity.UserProfile
 import com.jakewharton.rxrelay2.BehaviorRelay
 import io.reactivex.Completable
 import io.reactivex.Observable
 import java.util.concurrent.TimeUnit
 
 class InMemoryRepository : Repository {
-    // TODO: Remove
-    @Deprecated("Use userProfileBehaviorRelay")
     private val profileBehaviorRelay: BehaviorRelay<Profile> = BehaviorRelay.create()
-    // TODO: Remove
-    @Deprecated("Use cachedUserProfile")
-    private var cachedProfile = Profile(
-            name = "John Doe",
-            description = "With hard work you can achieve your goals and you can become successful!",
-            weight = 70f,
-            bodyFatPercentage = 8f,
-            backSize = 120f,
-            chestSize = 100f,
-            armsSize = 40f,
-            waistSize = 74.5f)
-
-    private val userProfileBehaviorRelay: BehaviorRelay<UserProfile> = BehaviorRelay.create()
     private val weightLogBehaviorRelay: BehaviorRelay<MutableList<Log.Weight>> = BehaviorRelay.create()
     private val measurementLogBehaviorRelay: BehaviorRelay<MutableList<Log.Measurement>> = BehaviorRelay.create()
-    private var cachedUserProfile = UserProfile(name = "John Doe",
+    private var cachedProfile = Profile(name = "John Doe",
             description = "With hard work you can achieve your goals and you can become successful!")
     private val cachedWeightLogList: MutableList<Log.Weight> = arrayListOf(
             Log.Weight(70f, 10.0f, TimeUnit.MILLISECONDS.toHours(1506780731000L)),
@@ -78,36 +62,19 @@ class InMemoryRepository : Repository {
                     // Simulate a long process
                     .delay(500, TimeUnit.MILLISECONDS)
 
-    // TODO: Remove
-    override fun getProfile(): Observable<Profile> =
+    override fun userProfile(): Observable<Profile> =
             Observable.just<Profile>(cachedProfile)
                     // Simulate a long process
                     .delay(1500, TimeUnit.MILLISECONDS)
 
-    // TODO: Remove
-    override fun getProfileRefreshing(): Observable<Profile> =
+    override fun userProfileRefreshing(): Observable<Profile> =
             profileBehaviorRelay.startWith(cachedProfile)
                     // Simulate a long process
                     .delay(1500, TimeUnit.MILLISECONDS)
 
-    override fun userProfile(): Observable<UserProfile> =
-            Observable.just<UserProfile>(cachedUserProfile)
-                    // Simulate a long process
-                    .delay(1500, TimeUnit.MILLISECONDS)
-
-    override fun userProfileRefreshing(): Observable<UserProfile> =
-            userProfileBehaviorRelay.startWith(cachedUserProfile)
-                    // Simulate a long process
-                    .delay(1500, TimeUnit.MILLISECONDS)
-
-    // TODO: Remove
-    override fun updateProfile(profile: Profile): Completable =
+    override fun updateUserProfile(profile: Profile): Completable =
             Completable.fromAction { cachedProfile = profile }
                     .doOnComplete { profileBehaviorRelay.accept(profile) }
-
-    override fun updateUserProfile(userProfile: UserProfile): Completable =
-            Completable.fromAction { cachedUserProfile = userProfile }
-                    .doOnComplete { userProfileBehaviorRelay.accept(userProfile) }
 
     override fun logWeight(weightLog: Log.Weight): Completable =
             Completable.fromAction { cachedWeightLogList.add(weightLog) }
