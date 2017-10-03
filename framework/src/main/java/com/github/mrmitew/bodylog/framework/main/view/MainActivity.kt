@@ -16,6 +16,12 @@ class MainActivity : InjectableActivity() {
         setListeners()
     }
 
+    override fun injectMembers(hasActivitySubcomponentBuilders: HasActivitySubcomponentBuilders) =
+            (hasActivitySubcomponentBuilders.getActivityComponentBuilder(MainActivity::class.java) as MainActivityComponent.Builder)
+                    .activityModule(MainActivityComponent.ComponentModule(this))
+                    .build()
+                    .injectMembers(this)
+
     private fun setupPager() =
             viewPager.apply {
                 adapter = MainPagerAdapter(supportFragmentManager)
@@ -23,22 +29,14 @@ class MainActivity : InjectableActivity() {
                 offscreenPageLimit = 2
             }
 
-    override fun injectMembers(hasActivitySubcomponentBuilders: HasActivitySubcomponentBuilders) =
-            (hasActivitySubcomponentBuilders.getActivityComponentBuilder(MainActivity::class.java) as MainActivityComponent.Builder)
-                    .activityModule(MainActivityComponent.ComponentModule(this))
-                    .build()
-                    .injectMembers(this)
-
     private fun setListeners() {
         main_bottom_navigation.setOnNavigationItemSelectedListener {
             when (it.itemId) {
                 R.id.action_dashboard -> {
-                    println("Home clicked")
                     viewPager.currentItem = 0
                     true
                 }
                 R.id.action_profile -> {
-                    println("Profile clicked")
                     viewPager.currentItem = 1
                     true
                 }
@@ -46,6 +44,6 @@ class MainActivity : InjectableActivity() {
             }
         }
 
-        fab.setOnClickListener { println("Fab clicked") }
+        fab.setOnClickListener { println("TODO: Fab click listener needs to be implemented") }
     }
 }
