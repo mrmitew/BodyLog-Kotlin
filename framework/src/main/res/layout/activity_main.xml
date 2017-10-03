@@ -29,13 +29,12 @@
         android:src="@drawable/ic_plus_white_24dp"
         app:fabSize="normal"/>
 
-    <android.support.design.widget.BottomNavigationView
+    <com.github.mrmitew.bodylog.framework.navigation.view.BottomNavigationBar
         android:id="@+id/main_bottom_navigation"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|end"
         app:itemIconTint="@color/colorPrimary"
-        app:itemTextColor="@color/colorPrimary"
-        app:menu="@menu/dashboard_bottom_navigation"/>
+        app:itemTextColor="@color/colorPrimary"/>
 
 </android.support.design.widget.CoordinatorLayout>
