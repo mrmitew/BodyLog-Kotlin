@@ -36,7 +36,13 @@ class InMemoryRepository : Repository {
             Log.Weight(71f, 10.0f, TimeUnit.MILLISECONDS.toHours(1506988800000L)),
             Log.Weight(71.2f, 11.0f, TimeUnit.MILLISECONDS.toHours(1507075200000L)),
             Log.Weight(71.0f, 8.0f, TimeUnit.MILLISECONDS.toHours(1507161600000L)),
-            Log.Weight(71.4f, 8.0f, TimeUnit.MILLISECONDS.toHours(1509372731000L))
+            Log.Weight(71.4f, 8.0f, TimeUnit.MILLISECONDS.toHours(1509372731000L)),
+            Log.Weight(71.8f, 8.0f, TimeUnit.MILLISECONDS.toHours(1507625208000L)),
+            Log.Weight(72.0f, 8.0f, TimeUnit.MILLISECONDS.toHours(1507798008000L)),
+            Log.Weight(72.2f, 8.0f, TimeUnit.MILLISECONDS.toHours(1507884408000L)),
+            Log.Weight(72.8f, 8.0f, TimeUnit.MILLISECONDS.toHours(1507970808000L)),
+            Log.Weight(73.0f, 8.0f, TimeUnit.MILLISECONDS.toHours(1508316408000L)),
+            Log.Weight(73.0f, 8.0f, TimeUnit.MILLISECONDS.toHours(1508402808000L))
     )
     private val cachedMeasurementLogList: MutableList<Log.Measurement> = arrayListOf(
             Log.Measurement(backSize = 120f,

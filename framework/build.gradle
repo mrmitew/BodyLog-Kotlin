@@ -112,6 +112,7 @@ dependencies {
     // UI libs
     implementation "com.android.support:appcompat-v7:$versions.supportLibs"
     implementation "com.android.support:design:$versions.supportLibs"
+    implementation "com.android.support:cardview-v7:$versions.supportLibs"
     implementation "com.github.PhilJay:MPAndroidChart:v$versions.mpAndroidChart"
 
     // Reactive

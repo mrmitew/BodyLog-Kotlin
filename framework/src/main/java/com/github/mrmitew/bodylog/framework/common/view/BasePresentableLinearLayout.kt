@@ -2,12 +2,12 @@ package com.github.mrmitew.bodylog.framework.common.view
 
 import android.content.Context
 import android.util.AttributeSet
-import com.github.mikephil.charting.charts.LineChart
+import android.widget.LinearLayout
 import com.github.mrmitew.bodylog.adapter.common.model.ViewState
 import com.github.mrmitew.bodylog.adapter.common.view.BaseView
 import com.github.mrmitew.bodylog.framework.common.presenter.BasePresenterHolder
 
-abstract class BasePresentableLineChart<V : BaseView<S>, S : ViewState> : LineChart, Presentable<V, S> {
+abstract class BasePresentableLinearLayout<V : BaseView<S>, S : ViewState> : LinearLayout, Presentable<V, S> {
     private lateinit var mPresenterHolder: BasePresenterHolder<V, S>
 
     constructor(context: Context) : super(context) {

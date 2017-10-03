@@ -6,7 +6,6 @@ import android.content.Context
 import android.graphics.Typeface
 import android.support.v7.app.AppCompatActivity
 import android.util.AttributeSet
-import com.github.mikephil.charting.components.AxisBase
 import com.github.mikephil.charting.components.XAxis
 import com.github.mikephil.charting.components.YAxis
 import com.github.mikephil.charting.components.YAxis.AxisDependency
@@ -24,7 +23,6 @@ import com.github.mrmitew.bodylog.framework.common.presenter.BasePresenterHolder
 import com.github.mrmitew.bodylog.framework.common.view.BasePresentableLineChart
 import com.github.mrmitew.bodylog.framework.di.presenter.PresenterHolderInjector
 import io.reactivex.Observable
-import java.text.SimpleDateFormat
 import java.util.*
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
@@ -35,6 +33,8 @@ class WeightLogLineChart : BasePresentableLineChart<WeightLogView, WeightLogView
         @Inject override lateinit var presenter: WeightLogPresenter
         override fun injectMembers(injector: PresenterHolderInjector) = injector.inject(this)
     }
+
+    var entryCount: Float = 0f
 
     override val view: WeightLogView = this
 
@@ -50,7 +50,7 @@ class WeightLogLineChart : BasePresentableLineChart<WeightLogView, WeightLogView
         setup()
     }
 
-    override fun injectPresenterHolder(): BasePresenterHolder<WeightLogView, WeightLogView.State> =
+    override fun injectPresenterHolder(): PresenterHolder =
             ViewModelProviders.of(context as AppCompatActivity).get(PresenterHolder::class.java)
 
     override fun loadWeightLogIntent(): Observable<LoadWeightLogIntent> =
@@ -59,7 +59,7 @@ class WeightLogLineChart : BasePresentableLineChart<WeightLogView, WeightLogView
     override fun render(state: WeightLogView.State) {
         println("TODO: not implemented $state")
 
-        if(state.inProgress) {
+        if (state.inProgress) {
             //TODO
         }
 
@@ -69,7 +69,7 @@ class WeightLogLineChart : BasePresentableLineChart<WeightLogView, WeightLogView
         }
 
         if (state.weightLogList.isNotEmpty()) {
-            addEntries(state.weightLogList.map { value -> Entry(value.timestamp.toFloat(), value.weight) })
+            addEntries(state.weightLogList.map { value -> Entry(entryCount++, value.weight) })
         } else {
             data?.getDataSetByIndex(0)?.clear()
         }
@@ -103,6 +103,11 @@ class WeightLogLineChart : BasePresentableLineChart<WeightLogView, WeightLogView
             data.setDrawValues(true)
         }
         data.addEntry(entry, 0)
+        // enable touch gestures
+        setTouchEnabled(true)
+        // enable scaling and dragging
+        isDragEnabled = true
+        setScaleEnabled(true)
         setMaxVisibleValueCount(Integer.MAX_VALUE)
         isAutoScaleMinMaxEnabled = true
         data.notifyDataChanged()
@@ -115,19 +120,17 @@ class WeightLogLineChart : BasePresentableLineChart<WeightLogView, WeightLogView
 
         // enable touch gestures
         setTouchEnabled(true)
-
-        dragDecelerationFrictionCoef = 0.9f
-
         // enable scaling and dragging
         isDragEnabled = true
         setScaleEnabled(true)
+
+        dragDecelerationFrictionCoef = 0.9f
+
         setDrawGridBackground(false)
-        isHighlightPerDragEnabled = true
         setNoDataTextTypeface(Typeface.SANS_SERIF)
         setNoDataTextColor(resources.getColor(R.color.colorAccent))
 
-        // set an alternative background color
-        setViewPortOffsets(0f, 20f, 0f, 0f)
+        setViewPortOffsets(0f, 0f, 0f, 0f)
 
         xAxis.position = XAxis.XAxisPosition.TOP_INSIDE
         xAxis.typeface = Typeface.SANS_SERIF
@@ -135,19 +138,19 @@ class WeightLogLineChart : BasePresentableLineChart<WeightLogView, WeightLogView
         xAxis.textColor = resources.getColor(R.color.colorAccent)
         xAxis.setDrawAxisLine(false)
         xAxis.setDrawGridLines(false)
-        xAxis.setCenterAxisLabels(true)
-//        xAxis.granularity = 0.5f
-        xAxis.valueFormatter = object : IAxisValueFormatter {
-            private val simpleDateFormat = SimpleDateFormat("dd MMM", Locale.ENGLISH)
-            override fun getFormattedValue(value: Float, axis: AxisBase): String =
-                    simpleDateFormat.format(Date(TimeUnit.HOURS.toMillis(value.toLong())))
-        }
+
+        xAxis.valueFormatter = IAxisValueFormatter { _, _ -> "" }
+//        xAxis.valueFormatter = object : IAxisValueFormatter {
+//            private val simpleDateFormat = SimpleDateFormat("dd MMM", Locale.ENGLISH)
+//            override fun getFormattedValue(value: Float, axis: AxisBase): String =
+////                    value.toString()
+//                    simpleDateFormat.format(Date(TimeUnit.HOURS.toMillis(value.toLong())))
+//        }
         axisLeft.setPosition(YAxis.YAxisLabelPosition.INSIDE_CHART)
         axisLeft.typeface = Typeface.SANS_SERIF
         axisLeft.textColor = resources.getColor(R.color.colorAccent)
         axisLeft.setDrawGridLines(false)
-        axisLeft.isGranularityEnabled = true
-        axisLeft.yOffset = -9f
+        axisLeft.valueFormatter = IAxisValueFormatter { _, _ -> "" }
         axisRight.isEnabled = false
     }
 

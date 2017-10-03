@@ -34,5 +34,7 @@ class DashboardActivity : InjectableActivity() {
                 else -> false
             }
         }
+
+        fab.setOnClickListener { println("Fab clicked") }
     }
 }
