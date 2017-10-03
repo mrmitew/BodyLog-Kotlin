@@ -38,8 +38,12 @@ class ProfileDetailsFragment : BasePresentableFragment<ProfileDetailsView, Profi
             ViewModelProviders.of(this).get(PresenterHolder::class.java)
 
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?,
-                              savedInstanceState: Bundle?): View? {
-        return inflater?.inflate(R.layout.fragment_profile_details, container, false)
+                              savedInstanceState: Bundle?): View? =
+            inflater?.inflate(R.layout.fragment_profile_details, container, false)
+
+    override fun onActivityCreated(savedInstanceState: Bundle?) {
+        super.onActivityCreated(savedInstanceState)
+        setClickListeners()
     }
 
     override fun loadProfileIntent(): Observable<LoadProfileIntent> = Observable.just(LoadProfileIntent())
