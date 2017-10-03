@@ -45,11 +45,21 @@ class InMemoryRepository : Repository {
             Log.Weight(73.0f, 8.0f, TimeUnit.MILLISECONDS.toHours(1508402808000L))
     )
     private val cachedMeasurementLogList: MutableList<Log.Measurement> = arrayListOf(
+            Log.Measurement(backSize = 115f,
+                    chestSize = 95f,
+                    armsSize = 38f,
+                    waistSize = 74.0f,
+                    timestamp = 1508316408000L),
             Log.Measurement(backSize = 120f,
                     chestSize = 100f,
                     armsSize = 40f,
-                    waistSize = 74.5f,
-                    timestamp = 30)
+                    waistSize = 74.0f,
+                    timestamp = 1508316408000L),
+            Log.Measurement(backSize = 125f,
+                    chestSize = 105f,
+                    armsSize = 45f,
+                    waistSize = 74.0f,
+                    timestamp = 1507970808000L)
     )
 
     override fun weightLog(): Observable<List<Log.Weight>> = Observable.just(cachedWeightLogList)
@@ -66,7 +76,7 @@ class InMemoryRepository : Repository {
             Observable.just(cachedMeasurementLogList.toList())
                     .mergeWith(measurementLogBehaviorRelay)
                     // Simulate a long process
-                    .delay(1500, TimeUnit.MILLISECONDS)
+                    .delay(500, TimeUnit.MILLISECONDS)
 
     // TODO: Remove
     override fun getProfile(): Observable<Profile> =

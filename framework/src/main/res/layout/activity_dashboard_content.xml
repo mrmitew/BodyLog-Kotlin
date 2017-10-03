@@ -13,7 +13,7 @@
         android:layout_height="160dp"
         android:layout_marginTop="?attr/actionBarSize"/>
 
-    <com.github.mrmitew.bodylog.framework.measurement.view.MeasurementLayout
+    <com.github.mrmitew.bodylog.framework.measurement.view.MeasurementLogLayout
         android:id="@+id/ll_measurements"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
