@@ -17,8 +17,8 @@ import com.github.mrmitew.bodylog.framework.common.presenter.BasePresenterHolder
 import com.github.mrmitew.bodylog.framework.common.view.BasePresentableLinearLayout
 import com.github.mrmitew.bodylog.framework.di.presenter.PresenterHolderInjector
 import io.reactivex.Observable
-import kotlinx.android.synthetic.main.layout_measurement.view.*
-import kotlinx.android.synthetic.main.measurement_content.view.*
+import kotlinx.android.synthetic.main.layout_measurement_log.view.*
+import kotlinx.android.synthetic.main.layout_measurement_log_content.view.*
 import javax.inject.Inject
 
 class MeasurementLogLayout : BasePresentableLinearLayout<MeasurementLogView, MeasurementLogView.State>, MeasurementLogView {
@@ -64,7 +64,7 @@ class MeasurementLogLayout : BasePresentableLinearLayout<MeasurementLogView, Mea
 
     private fun init() {
         (context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater)
-                .inflate(R.layout.layout_measurement, this, true)
+                .inflate(R.layout.layout_measurement_log, this, true)
     }
 
     private fun inflateMeasurementLog(measurementLogList: List<Log.Measurement>) {

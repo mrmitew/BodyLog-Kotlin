@@ -4,6 +4,7 @@ import com.github.mrmitew.bodylog.framework.measurement.view.MeasurementLogLayou
 import com.github.mrmitew.bodylog.framework.profile.details.view.LastUpdatedTextView
 import com.github.mrmitew.bodylog.framework.profile.details.view.ProfileDetailsActivity
 import com.github.mrmitew.bodylog.framework.profile.edit.view.ProfileEditActivity
+import com.github.mrmitew.bodylog.framework.weight.view.WeightLogLayout
 import com.github.mrmitew.bodylog.framework.weight.view.WeightLogLineChart
 
 interface PresenterHolderInjector {
@@ -12,4 +13,5 @@ interface PresenterHolderInjector {
     fun inject(target: LastUpdatedTextView.PresenterHolder)
     fun inject(target: WeightLogLineChart.PresenterHolder)
     fun inject(target: MeasurementLogLayout.PresenterHolder)
+    fun inject(target: WeightLogLayout.PresenterHolder)
 }

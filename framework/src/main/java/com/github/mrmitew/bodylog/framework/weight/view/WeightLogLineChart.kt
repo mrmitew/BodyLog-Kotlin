@@ -15,7 +15,6 @@ import com.github.mikephil.charting.data.LineDataSet
 import com.github.mikephil.charting.formatter.IAxisValueFormatter
 import com.github.mikephil.charting.interfaces.datasets.ILineDataSet
 import com.github.mrmitew.bodylog.R
-import com.github.mrmitew.bodylog.adapter.common.model.Error
 import com.github.mrmitew.bodylog.adapter.dashboard.weight.intent.LoadWeightLogIntent
 import com.github.mrmitew.bodylog.adapter.dashboard.weight.presenter.WeightLogPresenter
 import com.github.mrmitew.bodylog.adapter.dashboard.weight.view.WeightLogView
@@ -57,17 +56,6 @@ class WeightLogLineChart : BasePresentableLineChart<WeightLogView, WeightLogView
             Observable.just(LoadWeightLogIntent())
 
     override fun render(state: WeightLogView.State) {
-        println("TODO: not implemented $state")
-
-        if (state.inProgress) {
-            //TODO
-        }
-
-        if (state.loadError !is Error.Empty) {
-            //TODO
-            println(state.loadError)
-        }
-
         if (state.weightLogList.isNotEmpty()) {
             addEntries(state.weightLogList.map { value -> Entry(entryCount++, value.weight) })
         } else {
