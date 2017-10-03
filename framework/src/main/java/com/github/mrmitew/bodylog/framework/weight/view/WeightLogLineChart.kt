@@ -33,7 +33,7 @@ class WeightLogLineChart : BasePresentableLineChart<WeightLogView, WeightLogView
         override fun injectMembers(injector: PresenterHolderInjector) = injector.inject(this)
     }
 
-    var entryCount: Float = 0f
+    private var entryCount: Float = 0f
 
     override val view: WeightLogView = this
 

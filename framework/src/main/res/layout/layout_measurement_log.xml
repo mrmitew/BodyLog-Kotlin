@@ -7,7 +7,6 @@
     android:layout_height="match_parent"
     android:layout_gravity="center"
     android:visibility="visible"
-    tools:showIn="@layout/activity_dashboard"
     tools:visibility="visible">
 
     <!--TODO: Use a recyclerview with a horizontal scrolling-->
