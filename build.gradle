@@ -1,7 +1,7 @@
 // Top-level build file where you can add configuration options common to all sub-projects/modules.
 
 buildscript {
-    ext.kotlin_version = '1.1.50'
+    ext.kotlin_version = '1.1.51'
 
     repositories {
         google()
@@ -38,9 +38,10 @@ ext.versions = [
         kotlin              : "$kotlin_version",
 
         // UI libs
-        butterknife         : '8.5.1',
+        mpAndroidChart      : '3.0.2',
         constraintLayout    : '1.0.2',
         glide               : '4.0.0-RC0',
+        floatingActionMenu  : '1.0.0',
 
         // Reactive
         rxJava2             : '2.0.7',

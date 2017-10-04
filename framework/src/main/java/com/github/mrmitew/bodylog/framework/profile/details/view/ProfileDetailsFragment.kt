@@ -1,9 +1,12 @@
 package com.github.mrmitew.bodylog.framework.profile.details.view
 
+
 import android.app.Application
 import android.arch.lifecycle.ViewModelProviders
 import android.os.Bundle
+import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
 import com.github.mrmitew.bodylog.R
 import com.github.mrmitew.bodylog.adapter.common.model.Error
 import com.github.mrmitew.bodylog.adapter.profile.common.intent.LoadProfileIntent
@@ -12,37 +15,36 @@ import com.github.mrmitew.bodylog.adapter.profile.details.main.presenter.Profile
 import com.github.mrmitew.bodylog.adapter.profile.details.main.view.ProfileDetailsView
 import com.github.mrmitew.bodylog.domain.repository.entity.Profile
 import com.github.mrmitew.bodylog.framework.common.presenter.BasePresenterHolder
-import com.github.mrmitew.bodylog.framework.common.view.BasePresentableActivity
-import com.github.mrmitew.bodylog.framework.di.activity.HasActivitySubcomponentBuilders
+import com.github.mrmitew.bodylog.framework.common.view.BasePresentableFragment
 import com.github.mrmitew.bodylog.framework.di.presenter.PresenterHolderInjector
-import com.github.mrmitew.bodylog.framework.profile.details.di.ProfileDetailsActivityComponent
 import com.github.mrmitew.bodylog.framework.profile.edit.view.ProfileEditActivity
 import io.reactivex.Observable
-import kotlinx.android.synthetic.main.activity_profile_details.*
+import kotlinx.android.synthetic.main.fragment_profile_details.*
 import javax.inject.Inject
 
-class ProfileDetailsActivity : BasePresentableActivity<ProfileDetailsView, ProfileDetailsState>(), ProfileDetailsView {
+class ProfileDetailsFragment : BasePresentableFragment<ProfileDetailsView, ProfileDetailsState>(), ProfileDetailsView {
     class PresenterHolder(application: Application) : BasePresenterHolder<ProfileDetailsView, ProfileDetailsState>(application) {
         @Inject override lateinit var presenter: ProfileDetailsPresenter
         override fun injectMembers(injector: PresenterHolderInjector) = injector.inject(this)
     }
 
-    override val view: ProfileDetailsView = this
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_profile_details)
-        setClickListeners()
+    companion object {
+        fun newInstance() = ProfileDetailsFragment()
     }
 
-    override fun injectMembers(hasActivitySubcomponentBuilders: HasActivitySubcomponentBuilders) =
-            (hasActivitySubcomponentBuilders.getActivityComponentBuilder(ProfileDetailsActivity::class.java) as ProfileDetailsActivityComponent.Builder)
-                    .activityModule(ProfileDetailsActivityComponent.ComponentModule(this))
-                    .build()
-                    .injectMembers(this)
+    override val view: ProfileDetailsView = this
 
     override fun injectPresenterHolder(): BasePresenterHolder<ProfileDetailsView, ProfileDetailsState> =
             ViewModelProviders.of(this).get(PresenterHolder::class.java)
+
+    override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?,
+                              savedInstanceState: Bundle?): View? =
+            inflater?.inflate(R.layout.fragment_profile_details, container, false)
+
+    override fun onActivityCreated(savedInstanceState: Bundle?) {
+        super.onActivityCreated(savedInstanceState)
+        setClickListeners()
+    }
 
     override fun loadProfileIntent(): Observable<LoadProfileIntent> = Observable.just(LoadProfileIntent())
 
@@ -67,15 +69,9 @@ class ProfileDetailsActivity : BasePresentableActivity<ProfileDetailsView, Profi
             profile.apply {
                 tv_name.text = name
                 tv_description.text = description
-                tv_weight.text = weight.toString()
-                tv_body_fat_percentage.text = bodyFatPercentage.toString()
-                tv_back_size.text = backSize.toString()
-                tv_chest_size.text = chestSize.toString()
-                tv_arms_size.text = armsSize.toString()
-                tv_waist_size.text = waistSize.toString()
             }
 
     private fun setClickListeners() = btn_edit.setOnClickListener { onEditRequest() }
 
-    private fun onEditRequest() = startActivity(ProfileEditActivity.getCallingIntent(this))
+    private fun onEditRequest() = startActivity(ProfileEditActivity.getCallingIntent(activity))
 }

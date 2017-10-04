@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:card_view="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_gravity="center"
+    android:visibility="visible"
+    tools:visibility="visible">
+
+    <!--TODO: Use a recyclerview with a horizontal scrolling-->
+    <LinearLayout
+        android:id="@+id/ll_measurements_result"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        tools:visibility="visible"
+        android:orientation="horizontal">
+
+        <android.support.v7.widget.CardView
+            android:id="@+id/ll_previous_measurement"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="8dp"
+            android:layout_weight="1"
+            card_view:cardCornerRadius="4dp">
+
+            <include
+                layout="@layout/layout_measurement_log_content"/>
+
+        </android.support.v7.widget.CardView>
+
+        <android.support.v7.widget.CardView
+            android:id="@+id/ll_current_measurement"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            card_view:cardCornerRadius="4dp">
+
+            <include
+                layout="@layout/layout_measurement_log_content"/>
+
+        </android.support.v7.widget.CardView>
+    </LinearLayout>
+
+    <ProgressBar
+        android:id="@+id/pb_state_loading"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:gravity="center"
+        android:visibility="visible"
+        tools:visibility="gone"
+        android:indeterminate="true"/>
+</FrameLayout>

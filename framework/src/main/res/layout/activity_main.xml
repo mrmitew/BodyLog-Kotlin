@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.design.widget.CoordinatorLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        app:layout_collapseMode="none"
+        app:title="body log"
+        app:titleTextColor="@color/colorPrimary"/>
+
+    <com.github.mrmitew.bodylog.framework.main.view.NonSwipeableViewPager
+        android:id="@+id/viewPager"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="?attr/actionBarSize"/>
+
+    <com.github.ag.floatingactionmenu.OptionsFabLayout
+        android:id="@+id/fab"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|end"
+        android:layout_marginBottom="52dp"
+        app:color="@color/colorAccent"
+        app:options_color="@color/colorAccent"
+        app:options_menu="@menu/main_fab_menu"
+        app:src="@drawable/ic_plus_white_24dp"/>
+
+    <com.github.mrmitew.bodylog.framework.navigation.view.BottomNavigationBar
+        android:id="@+id/main_bottom_navigation"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|end"
+        app:itemIconTint="@color/colorPrimary"
+        app:itemTextColor="@color/colorPrimary"/>
+
+</android.support.design.widget.CoordinatorLayout>
