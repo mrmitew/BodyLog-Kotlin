@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    >
+    <item
+        android:id="@+id/action_log_weight"
+        android:icon="@drawable/ic_weight_white_24dp"
+        android:title="@string/log_weight"/>
+    <item
+        android:id="@+id/action_log_measurement"
+        android:icon="@drawable/ic_human_white_24dp"
+        android:title="@string/log_measurement"/>
+</menu>
