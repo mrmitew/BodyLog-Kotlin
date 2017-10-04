@@ -1,5 +1,6 @@
 package com.github.mrmitew.bodylog.framework.di.presenter
 
+import com.github.mrmitew.bodylog.framework.measurement.view.LogMeasurementDialogFragment
 import com.github.mrmitew.bodylog.framework.measurement.view.MeasurementLogLayout
 import com.github.mrmitew.bodylog.framework.navigation.view.BottomNavigationBar
 import com.github.mrmitew.bodylog.framework.profile.details.view.LastUpdatedTextView
@@ -18,4 +19,5 @@ interface PresenterHolderInjector {
     fun inject(target: ProfileDetailsFragment.PresenterHolder)
     fun inject(target: BottomNavigationBar.PresenterHolder)
     fun inject(target: LogWeightDialogFragment.PresenterHolder)
+    fun inject(target: LogMeasurementDialogFragment.PresenterHolder)
 }

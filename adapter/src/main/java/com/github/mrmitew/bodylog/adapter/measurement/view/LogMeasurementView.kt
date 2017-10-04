@@ -26,8 +26,8 @@ interface LogMeasurementView : BaseView<LogMeasurementView.State> {
             // no-op
         }
 
-        override fun logMeasurement(): Observable<LogMeasurementIntent> = Observable.empty()
+        override fun logMeasurementIntent(): Observable<LogMeasurementIntent> = Observable.empty()
     }
 
-    fun logMeasurement(): Observable<LogMeasurementIntent>
+    fun logMeasurementIntent(): Observable<LogMeasurementIntent>
 }

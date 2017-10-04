@@ -6,6 +6,7 @@ import com.github.mrmitew.bodylog.framework.common.view.InjectableActivity
 import com.github.mrmitew.bodylog.framework.di.activity.HasActivitySubcomponentBuilders
 import com.github.mrmitew.bodylog.framework.main.adapter.MainPagerAdapter
 import com.github.mrmitew.bodylog.framework.main.di.MainActivityComponent
+import com.github.mrmitew.bodylog.framework.measurement.view.LogMeasurementDialogFragment
 import com.github.mrmitew.bodylog.framework.weight.view.LogWeightDialogFragment
 import kotlinx.android.synthetic.main.activity_main.*
 
@@ -55,7 +56,7 @@ class MainActivity : InjectableActivity() {
         fab.setMiniFabSelectedListener {
             when (it.itemId) {
                 R.id.action_log_weight -> LogWeightDialogFragment.startFragment(fragmentManager = supportFragmentManager)
-                R.id.action_log_measurement -> println("Log measurement")
+                R.id.action_log_measurement -> LogMeasurementDialogFragment.startFragment(fragmentManager = supportFragmentManager)
             }
             fab.closeOptionsMenu()
         }

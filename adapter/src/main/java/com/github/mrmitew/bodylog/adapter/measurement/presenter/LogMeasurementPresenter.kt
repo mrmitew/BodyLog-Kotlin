@@ -17,20 +17,21 @@ class LogMeasurementPresenter @Inject constructor(
     : DetachableMviPresenter<LogMeasurementView, LogMeasurementView.State>(emptyView) {
 
     override fun viewIntentStream(): Observable<ViewIntent> =
-            view.logMeasurement().cast(ViewIntent::class.java)
+            view.logMeasurementIntent().cast(ViewIntent::class.java)
 
     override fun resultStateStream(viewIntentStream: Observable<ViewIntent>): Observable<ResultState> =
-            viewIntentStream.publish { shared ->
-                shared.ofType(LogMeasurementIntent::class.java).compose(logMeasurementInteractor).cast(ResultState::class.java)
-            }
+            viewIntentStream
+                    .cast(LogMeasurementIntent::class.java)
+                    .compose(logMeasurementInteractor)
+                    .cast(ResultState::class.java)
 
     override fun viewState(previousState: LogMeasurementView.State, resultState: ResultState): LogMeasurementView.State {
         when (resultState) {
             is LogMeasurementInteractor.State ->
                 return when (resultState) {
-                    is LogMeasurementInteractor.State.InProgress -> previousState.copy(inProgress = true)
-                    is LogMeasurementInteractor.State.Successful -> previousState.copy(inProgress = false, measurementLog = resultState.measurementLog, saveError = Error.Empty.INSTANCE)
-                    is LogMeasurementInteractor.State.Error -> previousState.copy(inProgress = false, saveError = resultState.error)
+                    is LogMeasurementInteractor.State.InProgress -> previousState.copy(inProgress = true, saveSuccessful = false, saveError = Error.Empty.INSTANCE)
+                    is LogMeasurementInteractor.State.Successful -> previousState.copy(inProgress = false, saveSuccessful = true, measurementLog = resultState.measurementLog, saveError = Error.Empty.INSTANCE)
+                    is LogMeasurementInteractor.State.Error -> previousState.copy(inProgress = false, saveSuccessful = false, saveError = resultState.error)
                 }
         }
 

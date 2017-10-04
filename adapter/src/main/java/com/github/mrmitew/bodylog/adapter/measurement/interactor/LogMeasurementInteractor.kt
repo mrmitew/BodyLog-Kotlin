@@ -25,16 +25,18 @@ class LogMeasurementInteractor @Inject constructor(private val threadExecutor: T
 
     override fun apply(upstream: Observable<LogMeasurementIntent>): Observable<State> =
             upstream
-                    .concatMap { buildUseCaseObservable(it) }
-                    .map { State.Successful(it) as State }
+                    .concatMap {
+                        buildUseCaseObservable(it)
+                                .map { State.Successful(it) as State }
+                                .startWith(State.InProgress())
+                    }
                     .onErrorReturn { State.Error(it) }
-                    .startWith(State.InProgress())
                     .observeOn(postExecutionThread.scheduler())
 
     internal fun getUseCaseObservable(measurementLog: Log.Measurement): Observable<Log.Measurement> =
             repository.logMeasurement(measurementLog)
                     .toObservable<Log.Measurement>()
-                    .startWith(measurementLog)
+                    .concatWith(Observable.just(measurementLog))
 
     private fun buildUseCaseObservable(intent: LogMeasurementIntent): Observable<Log.Measurement> =
             getUseCaseObservable(intent.measurementLog)
