@@ -19,6 +19,8 @@ import com.github.mrmitew.bodylog.framework.di.presenter.PresenterHolderInjector
 import io.reactivex.Observable
 import kotlinx.android.synthetic.main.layout_measurement_log.view.*
 import kotlinx.android.synthetic.main.layout_measurement_log_content.view.*
+import java.text.SimpleDateFormat
+import java.util.*
 import javax.inject.Inject
 
 class MeasurementLogLayout : BasePresentableLinearLayout<MeasurementLogView, MeasurementLogView.State>, MeasurementLogView {
@@ -28,6 +30,7 @@ class MeasurementLogLayout : BasePresentableLinearLayout<MeasurementLogView, Mea
     }
 
     override val view: MeasurementLogView = this
+    private val simpleDateFormat = SimpleDateFormat("dd MMM (HH:mm)", Locale.ENGLISH)
 
     constructor(context: Context) : super(context) {
         init()
@@ -78,6 +81,7 @@ class MeasurementLogLayout : BasePresentableLinearLayout<MeasurementLogView, Mea
             if (beforeLastIndex > 0) {
                 measurementLogList[beforeLastIndex].apply {
                     ll_previous_measurement.apply {
+                        tv_date.text = simpleDateFormat.format(timestamp)
                         tv_back_size.text = backSize.toString()
                         tv_chest_size.text = chestSize.toString()
                         tv_arms_size.text = armsSize.toString()
@@ -90,6 +94,7 @@ class MeasurementLogLayout : BasePresentableLinearLayout<MeasurementLogView, Mea
 
             measurementLogList[lastIndex].apply {
                 ll_current_measurement.apply {
+                    tv_date.text = simpleDateFormat.format(timestamp)
                     tv_back_size.text = backSize.toString()
                     tv_chest_size.text = chestSize.toString()
                     tv_arms_size.text = armsSize.toString()

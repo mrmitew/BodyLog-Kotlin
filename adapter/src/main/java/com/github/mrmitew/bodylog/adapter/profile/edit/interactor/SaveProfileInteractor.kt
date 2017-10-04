@@ -24,16 +24,18 @@ class SaveProfileInteractor @Inject constructor(private val threadExecutor: Thre
 
     override fun apply(upstream: Observable<SaveProfileIntent>): Observable<State> =
             upstream
-                    .concatMap { buildUseCaseObservable(it) }
-                    .map { State.Successful(it) as State }
+                    .concatMap {
+                        buildUseCaseObservable(it)
+                                .map { State.Successful(it) as State }
+                                .startWith(State.InProgress())
+                    }
                     .onErrorReturn { State.Error(it) }
-                    .startWith(State.InProgress())
                     .observeOn(postExecutionThread.scheduler())
 
     internal fun getUseCaseObservable(profile: Profile): Observable<Profile> =
             repository.updateUserProfile(profile)
                     .toObservable<Profile>()
-                    .startWith(profile)
+                    .concatWith(Observable.just(profile))
 
     private fun buildUseCaseObservable(intent: SaveProfileIntent): Observable<Profile> =
             getUseCaseObservable(intent.profile)

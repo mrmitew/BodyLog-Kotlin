@@ -54,23 +54,23 @@ class InMemoryRepository : Repository {
             Observable.just(cachedWeightLogList.toList())
                     .mergeWith(weightLogBehaviorRelay)
                     // Simulate a long process
-                    .delay(1500, TimeUnit.MILLISECONDS)
+                    .delay(500, TimeUnit.MILLISECONDS)
 
     override fun measurementLogRefreshing(): Observable<List<Log.Measurement>> =
             Observable.just(cachedMeasurementLogList.toList())
                     .mergeWith(measurementLogBehaviorRelay)
                     // Simulate a long process
-                    .delay(500, TimeUnit.MILLISECONDS)
+                    .delay(700, TimeUnit.MILLISECONDS)
 
     override fun userProfile(): Observable<Profile> =
             Observable.just<Profile>(cachedProfile)
                     // Simulate a long process
-                    .delay(1500, TimeUnit.MILLISECONDS)
+                    .delay(500, TimeUnit.MILLISECONDS)
 
     override fun userProfileRefreshing(): Observable<Profile> =
             profileBehaviorRelay.startWith(cachedProfile)
                     // Simulate a long process
-                    .delay(1500, TimeUnit.MILLISECONDS)
+                    .delay(500, TimeUnit.MILLISECONDS)
 
     override fun updateUserProfile(profile: Profile): Completable =
             Completable.fromAction { cachedProfile = profile }
@@ -78,9 +78,13 @@ class InMemoryRepository : Repository {
 
     override fun logWeight(weightLog: Log.Weight): Completable =
             Completable.fromAction { cachedWeightLogList.add(weightLog) }
+                    // Simulate a long process
+                    .delay(2000, TimeUnit.MILLISECONDS)
                     .doOnComplete { weightLogBehaviorRelay.accept(arrayListOf(weightLog)) }
 
     override fun logMeasurement(bodyMeasurementLog: Log.Measurement): Completable =
             Completable.fromAction { cachedMeasurementLogList.add(bodyMeasurementLog) }
+                    // Simulate a long process
+                    .delay(500, TimeUnit.MILLISECONDS)
                     .doOnComplete { measurementLogBehaviorRelay.accept(arrayListOf(bodyMeasurementLog)) }
 }
