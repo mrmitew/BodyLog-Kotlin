@@ -19,9 +19,7 @@ class MeasurementLogPresenter @Inject constructor(
             view.loadMeasurementLogIntent().cast(ViewIntent::class.java)
 
     override fun resultStateStream(viewIntentStream: Observable<ViewIntent>): Observable<ResultState> =
-            viewIntentStream.publish { shared ->
-                shared.ofType(LoadMeasurementLogIntent::class.java).compose(loadMeasurementLogInteractor).cast(ResultState::class.java)
-            }
+            viewIntentStream.cast(LoadMeasurementLogIntent::class.java).compose(loadMeasurementLogInteractor).cast(ResultState::class.java)
 
     override fun viewState(previousState: MeasurementLogView.State, resultState: ResultState): MeasurementLogView.State {
         when (resultState) {

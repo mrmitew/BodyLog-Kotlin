@@ -27,9 +27,7 @@ class WeightLogPresenter @Inject constructor(
             view.loadWeightLogIntent().cast(ViewIntent::class.java)
 
     override fun resultStateStream(viewIntentStream: Observable<ViewIntent>): Observable<ResultState> =
-            viewIntentStream.publish { shared ->
-                shared.ofType(LoadWeightLogIntent::class.java).flatMap { weightLogStateRelay }
-            }
+            viewIntentStream.cast(LoadWeightLogIntent::class.java).flatMap { weightLogStateRelay }
 
     override fun viewState(previousState: WeightLogView.State, resultState: ResultState): WeightLogView.State {
         when (resultState) {
