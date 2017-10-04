@@ -8,6 +8,7 @@ import com.github.mrmitew.bodylog.framework.main.adapter.MainPagerAdapter
 import com.github.mrmitew.bodylog.framework.main.di.MainActivityComponent
 import kotlinx.android.synthetic.main.activity_main.*
 
+
 class MainActivity : InjectableActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -44,6 +45,17 @@ class MainActivity : InjectableActivity() {
             }
         }
 
-        fab.setOnClickListener { println("TODO: Fab click listener needs to be implemented") }
+        fab.setMainFabOnClickListener {
+            if (fab.isOptionsMenuOpened) {
+                fab.closeOptionsMenu()
+            }
+        }
+
+        fab.setMiniFabSelectedListener {
+            when (it.itemId) {
+                R.id.action_log_weight -> println("Log weight")
+                R.id.action_log_measurement -> println("Log measurement")
+            }
+        }
     }
 }

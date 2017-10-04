@@ -19,15 +19,16 @@
         android:layout_height="match_parent"
         android:layout_marginTop="?attr/actionBarSize"/>
 
-    <android.support.design.widget.FloatingActionButton
+    <com.github.ag.floatingactionmenu.OptionsFabLayout
         android:id="@+id/fab"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|end"
         android:layout_marginBottom="52dp"
-        android:layout_marginEnd="16dp"
-        android:src="@drawable/ic_plus_white_24dp"
-        app:fabSize="normal"/>
+        app:color="@color/colorAccent"
+        app:options_color="@color/colorAccent"
+        app:options_menu="@menu/main_fab_menu"
+        app:src="@drawable/ic_plus_white_24dp"/>
 
     <com.github.mrmitew.bodylog.framework.navigation.view.BottomNavigationBar
         android:id="@+id/main_bottom_navigation"
