@@ -41,6 +41,7 @@ ext.versions = [
         mpAndroidChart      : '3.0.2',
         constraintLayout    : '1.0.2',
         glide               : '4.0.0-RC0',
+        floatingActionMenu  : '1.0.0',
 
         // Reactive
         rxJava2             : '2.0.7',

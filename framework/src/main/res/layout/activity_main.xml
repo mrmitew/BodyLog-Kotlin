@@ -28,7 +28,7 @@
         app:color="@color/colorAccent"
         app:options_color="@color/colorAccent"
         app:options_menu="@menu/main_fab_menu"
-        app:src="@drawable/ic_plus"/>
+        app:src="@drawable/ic_plus_white_24dp"/>
 
     <com.github.mrmitew.bodylog.framework.navigation.view.BottomNavigationBar
         android:id="@+id/main_bottom_navigation"
