@@ -20,17 +20,25 @@ class LogWeightPresenter @Inject constructor(
             view.logWeightIntent().cast(ViewIntent::class.java)
 
     override fun resultStateStream(viewIntentStream: Observable<ViewIntent>): Observable<ResultState> =
-            viewIntentStream.publish { shared ->
-                shared.ofType(LogWeightIntent::class.java).compose(logWeightInteractor).cast(ResultState::class.java)
-            }
+            viewIntentStream
+                    .cast(LogWeightIntent::class.java)
+                    .compose(logWeightInteractor)
+                    .cast(ResultState::class.java)
 
     override fun viewState(previousState: LogWeightView.State, resultState: ResultState): LogWeightView.State {
         when (resultState) {
             is LogWeightInteractor.State ->
                 return when (resultState) {
-                    is LogWeightInteractor.State.InProgress -> previousState.copy(inProgress = true)
-                    is LogWeightInteractor.State.Successful -> previousState.copy(inProgress = false, weightLog = resultState.weightLog, saveError = Error.Empty.INSTANCE)
-                    is LogWeightInteractor.State.Error -> previousState.copy(inProgress = false, saveError = resultState.error)
+                    is LogWeightInteractor.State.InProgress -> previousState.copy(inProgress = true,
+                            saveSuccessful = false,
+                            saveError = Error.Empty.INSTANCE)
+                    is LogWeightInteractor.State.Successful -> previousState.copy(inProgress = false,
+                            saveSuccessful = true,
+                            weightLog = resultState.weightLog,
+                            saveError = Error.Empty.INSTANCE)
+                    is LogWeightInteractor.State.Error -> previousState.copy(inProgress = false,
+                            saveSuccessful = false,
+                            saveError = resultState.error)
                 }
         }
 

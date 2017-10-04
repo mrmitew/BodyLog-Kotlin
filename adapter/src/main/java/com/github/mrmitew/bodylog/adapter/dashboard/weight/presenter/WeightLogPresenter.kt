@@ -6,21 +6,29 @@ import com.github.mrmitew.bodylog.adapter.common.presenter.DetachableMviPresente
 import com.github.mrmitew.bodylog.adapter.dashboard.weight.intent.LoadWeightLogIntent
 import com.github.mrmitew.bodylog.adapter.dashboard.weight.interactor.LoadWeightLogInteractor
 import com.github.mrmitew.bodylog.adapter.dashboard.weight.view.WeightLogView
+import com.jakewharton.rxrelay2.BehaviorRelay
 import io.reactivex.Observable
 import javax.inject.Inject
 
 class WeightLogPresenter @Inject constructor(
         private val loadWeightLogInteractor: LoadWeightLogInteractor,
+        private val weightLogStateRelay: BehaviorRelay<ResultState>,
         override val initialState: WeightLogView.State = WeightLogView.State.Factory.default(),
         override val emptyView: WeightLogView = WeightLogView.NoOp())
     : DetachableMviPresenter<WeightLogView, WeightLogView.State>(emptyView) {
+
+    override fun internalIntents() =
+            arrayOf(Observable.just(LoadWeightLogIntent())
+                    .compose(loadWeightLogInteractor)
+                    .doOnNext { println("[DASHBOARD] [WEIGHT LOG MODEL] (${it.hashCode()}) : $it") }
+                    .subscribe(weightLogStateRelay))
 
     override fun viewIntentStream(): Observable<ViewIntent> =
             view.loadWeightLogIntent().cast(ViewIntent::class.java)
 
     override fun resultStateStream(viewIntentStream: Observable<ViewIntent>): Observable<ResultState> =
             viewIntentStream.publish { shared ->
-                shared.ofType(LoadWeightLogIntent::class.java).compose(loadWeightLogInteractor).cast(ResultState::class.java)
+                shared.ofType(LoadWeightLogIntent::class.java).flatMap { weightLogStateRelay }
             }
 
     override fun viewState(previousState: WeightLogView.State, resultState: ResultState): WeightLogView.State {
@@ -31,8 +39,9 @@ class WeightLogPresenter @Inject constructor(
                     is LoadWeightLogInteractor.State.Successful ->
                         previousState.copy(inProgress = false,
                                 loadSuccessful = true,
-                                weightLogList = previousState.weightLogList.toMutableList()
-                                        .apply { addAll(resultState.weightLogList) })
+                                weightLogList = resultState.weightLogList)
+//                                weightLogList = previousState.weightLogList.toMutableList()
+//                                        .apply { addAll(resultState.weightLogList) })
                     is LoadWeightLogInteractor.State.Error -> previousState.copy(inProgress = false,
                             loadSuccessful = false,
                             loadError = resultState.error)

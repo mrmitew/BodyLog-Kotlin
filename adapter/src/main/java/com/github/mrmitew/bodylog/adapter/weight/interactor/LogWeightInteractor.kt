@@ -24,16 +24,18 @@ class LogWeightInteractor @Inject constructor(private val threadExecutor: Thread
 
     override fun apply(upstream: Observable<LogWeightIntent>): Observable<State> =
             upstream
-                    .concatMap { buildUseCaseObservable(it) }
-                    .map { State.Successful(it) as State }
+                    .concatMap {
+                        buildUseCaseObservable(it)
+                                .map { State.Successful(it) as State }
+                                .startWith(State.InProgress())
+                    }
                     .onErrorReturn { State.Error(it) }
-                    .startWith(State.InProgress())
                     .observeOn(postExecutionThread.scheduler())
 
     internal fun getUseCaseObservable(weightLog: Log.Weight): Observable<Log.Weight> =
             repository.logWeight(weightLog)
                     .toObservable<Log.Weight>()
-                    .startWith(weightLog)
+                    .concatWith(Observable.just(weightLog))
 
     private fun buildUseCaseObservable(intent: LogWeightIntent): Observable<Log.Weight> =
             getUseCaseObservable(intent.weightLog)
