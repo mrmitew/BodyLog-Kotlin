@@ -7,11 +7,12 @@ import com.github.mrmitew.bodylog.framework.di.activity.HasActivitySubcomponentB
 import com.github.mrmitew.bodylog.framework.main.adapter.MainPagerAdapter
 import com.github.mrmitew.bodylog.framework.main.di.MainActivityComponent
 import com.github.mrmitew.bodylog.framework.measurement.view.LogMeasurementDialogFragment
+import com.github.mrmitew.bodylog.framework.measurement.view.MeasurementLogLayout
 import com.github.mrmitew.bodylog.framework.weight.view.LogWeightDialogFragment
 import kotlinx.android.synthetic.main.activity_main.*
 
 
-class MainActivity : InjectableActivity() {
+class MainActivity : InjectableActivity(), MeasurementLogLayout.MeasurementLogInjectionProvider {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -19,11 +20,17 @@ class MainActivity : InjectableActivity() {
         setListeners()
     }
 
-    override fun injectMembers(hasActivitySubcomponentBuilders: HasActivitySubcomponentBuilders) =
-            (hasActivitySubcomponentBuilders.getActivityComponentBuilder(MainActivity::class.java) as MainActivityComponent.Builder)
-                    .activityModule(MainActivityComponent.ComponentModule(this))
-                    .build()
-                    .injectMembers(this)
+    lateinit var mainActivityComponent: MainActivityComponent
+
+    override fun injectMembers(hasActivitySubcomponentBuilders: HasActivitySubcomponentBuilders) {
+        mainActivityComponent = (hasActivitySubcomponentBuilders.getActivityComponentBuilder(MainActivity::class.java) as MainActivityComponent.Builder)
+                .activityModule(MainActivityComponent.ComponentModule(this))
+                .build()
+        mainActivityComponent
+                .injectMembers(this)
+    }
+
+    override fun measurementLogProviderComponent() = mainActivityComponent
 
     private fun setupPager() =
             viewPager.apply {

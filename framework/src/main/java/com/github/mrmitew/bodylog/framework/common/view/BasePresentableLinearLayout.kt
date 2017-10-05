@@ -8,7 +8,7 @@ import com.github.mrmitew.bodylog.adapter.common.view.BaseView
 import com.github.mrmitew.bodylog.framework.common.presenter.BasePresenterHolder
 
 abstract class BasePresentableLinearLayout<V : BaseView<S>, S : ViewState> : LinearLayout, Presentable<V, S> {
-    private lateinit var mPresenterHolder: BasePresenterHolder<V, S>
+    private lateinit var presenterHolder: BasePresenterHolder<V, S>
 
     constructor(context: Context) : super(context) {
         presenterInit()
@@ -29,20 +29,20 @@ abstract class BasePresentableLinearLayout<V : BaseView<S>, S : ViewState> : Lin
     }
 
     private fun setPresenterHolder() {
-        mPresenterHolder = injectPresenterHolder()
+        presenterHolder = injectPresenterHolder()
     }
 
     override fun onAttachedToWindow() {
         super.onAttachedToWindow()
         if (!isInEditMode) {
-            mPresenterHolder.onAttachedToWindow(view)
+            presenterHolder.onAttachedToWindow(view)
         }
     }
 
     override fun onDetachedFromWindow() {
         super.onDetachedFromWindow()
         if (!isInEditMode) {
-            mPresenterHolder.onDetachedFromWindow()
+            presenterHolder.onDetachedFromWindow()
         }
     }
 }

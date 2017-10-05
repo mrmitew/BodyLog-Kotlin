@@ -12,15 +12,12 @@ import com.github.mrmitew.bodylog.adapter.common.model.Error
 import com.github.mrmitew.bodylog.adapter.dashboard.measurement.intent.LoadMeasurementLogIntent
 import com.github.mrmitew.bodylog.adapter.dashboard.measurement.presenter.MeasurementLogPresenter
 import com.github.mrmitew.bodylog.adapter.dashboard.measurement.view.MeasurementLogView
-import com.github.mrmitew.bodylog.domain.repository.entity.Log
 import com.github.mrmitew.bodylog.framework.common.presenter.BasePresenterHolder
 import com.github.mrmitew.bodylog.framework.common.view.BasePresentableLinearLayout
 import com.github.mrmitew.bodylog.framework.di.presenter.PresenterHolderInjector
+import com.github.mrmitew.bodylog.framework.measurement.adapter.MeasurementLogAdapter
 import io.reactivex.Observable
 import kotlinx.android.synthetic.main.layout_measurement_log.view.*
-import kotlinx.android.synthetic.main.layout_measurement_log_content.view.*
-import java.text.SimpleDateFormat
-import java.util.*
 import javax.inject.Inject
 
 class MeasurementLogLayout : BasePresentableLinearLayout<MeasurementLogView, MeasurementLogView.State>, MeasurementLogView {
@@ -30,7 +27,9 @@ class MeasurementLogLayout : BasePresentableLinearLayout<MeasurementLogView, Mea
     }
 
     override val view: MeasurementLogView = this
-    private val simpleDateFormat = SimpleDateFormat("dd MMM (HH:mm)", Locale.ENGLISH)
+
+    @Inject
+    protected lateinit var adapter: MeasurementLogAdapter
 
     constructor(context: Context) : super(context) {
         init()
@@ -47,60 +46,43 @@ class MeasurementLogLayout : BasePresentableLinearLayout<MeasurementLogView, Mea
     override fun injectPresenterHolder(): PresenterHolder =
             ViewModelProviders.of(context as AppCompatActivity).get(PresenterHolder::class.java)
 
-
     override fun loadMeasurementLogIntent(): Observable<LoadMeasurementLogIntent> =
             Observable.just(LoadMeasurementLogIntent())
 
     override fun render(state: MeasurementLogView.State) {
-        ll_measurements_result.visibility = if (!state.inProgress) View.VISIBLE else View.GONE
+        rv_measurement.visibility = if (!state.inProgress) View.VISIBLE else View.GONE
         pb_state_loading.visibility = if (state.inProgress) View.VISIBLE else View.GONE
 
         if (state.loadError !is Error.Empty) {
-            //TODO
+            //TODO show error view
             println(state.loadError)
         }
 
         if (state.loadSuccessful) {
-            inflateMeasurementLog(state.measurementLogList)
+            // TODO: Remove error view
         }
     }
 
     private fun init() {
         (context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater)
                 .inflate(R.layout.layout_measurement_log, this, true)
+
+        if (!isInEditMode) {
+            if (context is MeasurementLogInjectionProvider) {
+                (context as MeasurementLogInjectionProvider)
+                        .measurementLogProviderComponent().inject(this)
+            } else {
+                throw RuntimeException("Context should implement the MeasurementLogInjectionProvider interface")
+            }
+            rv_measurement.adapter = adapter
+        }
     }
 
-    private fun inflateMeasurementLog(measurementLogList: List<Log.Measurement>) {
-        if (measurementLogList.isEmpty()) {
-            // TODO: show a placeholder?
-            println("No measurement taken yet")
-        } else {
-            val lastIndex = measurementLogList.lastIndex
-            val beforeLastIndex = lastIndex - 1
+    interface MeasurementLogProviderComponent {
+        fun inject(target: MeasurementLogLayout)
+    }
 
-            if (beforeLastIndex > 0) {
-                measurementLogList[beforeLastIndex].apply {
-                    ll_previous_measurement.apply {
-                        tv_date.text = simpleDateFormat.format(timestamp)
-                        tv_back_size.text = backSize.toString()
-                        tv_chest_size.text = chestSize.toString()
-                        tv_arms_size.text = armsSize.toString()
-                        tv_waist_size.text = waistSize.toString()
-                    }
-                }
-            } else {
-                ll_previous_measurement.visibility = View.GONE
-            }
-
-            measurementLogList[lastIndex].apply {
-                ll_current_measurement.apply {
-                    tv_date.text = simpleDateFormat.format(timestamp)
-                    tv_back_size.text = backSize.toString()
-                    tv_chest_size.text = chestSize.toString()
-                    tv_arms_size.text = armsSize.toString()
-                    tv_waist_size.text = waistSize.toString()
-                }
-            }
-        }
+    interface MeasurementLogInjectionProvider {
+        fun measurementLogProviderComponent(): MeasurementLogProviderComponent
     }
 }

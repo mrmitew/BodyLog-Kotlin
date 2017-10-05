@@ -19,6 +19,8 @@ import com.github.mrmitew.bodylog.framework.di.activity.ActivityComponentBuilder
 import com.github.mrmitew.bodylog.framework.di.activity.ActivityModule
 import com.github.mrmitew.bodylog.framework.di.activity.ActivityScope
 import com.github.mrmitew.bodylog.framework.main.view.MainActivity
+import com.github.mrmitew.bodylog.framework.measurement.adapter.MeasurementLogAdapter
+import com.github.mrmitew.bodylog.framework.measurement.view.MeasurementLogLayout
 import com.jakewharton.rxrelay2.BehaviorRelay
 import dagger.Module
 import dagger.Provides
@@ -28,7 +30,7 @@ import javax.inject.Singleton
 
 @ActivityScope
 @Subcomponent(modules = arrayOf(MainActivityComponent.ComponentModule::class))
-interface MainActivityComponent : ActivityComponent<MainActivity> {
+interface MainActivityComponent : ActivityComponent<MainActivity>, MeasurementLogLayout.MeasurementLogProviderComponent {
     @Singleton
     @Module
     class PresenterModule {
@@ -84,5 +86,11 @@ interface MainActivityComponent : ActivityComponent<MainActivity> {
 
     @ActivityScope
     @Module
-    class ComponentModule(activity: MainActivity) : ActivityModule<MainActivity>(activity)
+    class ComponentModule(activity: MainActivity) : ActivityModule<MainActivity>(activity) {
+        /**
+         * Dashboard
+         */
+        @Provides
+        fun provideMeasurementLogAdapter(activity: MainActivity) = MeasurementLogAdapter(activity)
+    }
 }
