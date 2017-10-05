@@ -5,9 +5,9 @@ import io.reactivex.Observable
 import io.reactivex.schedulers.Schedulers
 
 abstract class AbstractInteractor<R>(private val threadExecutor: ThreadExecutor) {
-    abstract internal fun getUseCaseObservable(): Observable<R>
+    abstract internal fun useCaseObservable(): Observable<R>
 
     protected fun buildUseCaseObservable(): Observable<R> =
-            getUseCaseObservable()
+            useCaseObservable()
                     .subscribeOn(Schedulers.from(threadExecutor))
 }

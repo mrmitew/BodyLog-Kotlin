@@ -86,9 +86,7 @@ class MeasurementLogAdapter(private val activity: AppCompatActivity) : RecyclerV
     /**
      * Presenter and presenter holder code
      */
-    private fun presenterInit() {
-        setPresenterHolder()
-    }
+    private fun presenterInit() = setPresenterHolder()
 
     private fun setPresenterHolder() {
         presenterHolder = injectPresenterHolder()
