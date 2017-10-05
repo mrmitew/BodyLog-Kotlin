@@ -38,22 +38,34 @@ interface MainActivityComponent : ActivityComponent<MainActivity>, MeasurementLo
          * Dashboard
          */
         @Provides
-        internal fun providesWeightLogPresenter(loadWeightLogInteractor: LoadWeightLogInteractor) =
-                WeightLogPresenter(loadWeightLogInteractor = loadWeightLogInteractor,
-                        weightLogStateRelay = BehaviorRelay.create())
+        internal fun providesWeightLogPresenter(loadWeightLogInteractor: LoadWeightLogInteractor,
+                                                @Named("weightLogInteractorRelay") weightLogInteractorRelay: BehaviorRelay<ResultState>) =
+                WeightLogPresenter(loadWeightLogInteractor, weightLogInteractorRelay)
 
         @Provides
-        internal fun providesMeasurementLogPresenter(loadMeasurementLogInteractor: LoadMeasurementLogInteractor) =
-                MeasurementLogPresenter(loadMeasurementLogInteractor = loadMeasurementLogInteractor,
-                        measurementLogResultStateRelay = BehaviorRelay.create())
-        /**
-         * Profile details
-         */
+        internal fun providesMeasurementLogPresenter(loadMeasurementLogInteractor: LoadMeasurementLogInteractor,
+                                                     @Named("measurementLogInteractorRelay") measurementLogResultStateRelay: BehaviorRelay<ResultState>) =
+                MeasurementLogPresenter(loadMeasurementLogInteractor, measurementLogResultStateRelay)
+
+        // Share these relays across instances of presenters as we are reusing them for some views
         @Provides
         @Named("loadProfileInteractorRelay")
         internal fun providesLoadProfileInteractorRelay(): BehaviorRelay<ResultState> =
                 BehaviorRelay.create()
 
+        @Provides
+        @Named("measurementLogInteractorRelay")
+        internal fun provideMeasurementLogRelay(): BehaviorRelay<ResultState> =
+                BehaviorRelay.create()
+
+        @Provides
+        @Named("weightLogInteractorRelay")
+        internal fun provideWeightLogStateRelay(): BehaviorRelay<ResultState> =
+                BehaviorRelay.create()
+
+        /**
+         * Profile details
+         */
         @Provides
         internal fun providesProfileDetailsPresenter(loadProfileInteractor: LoadProfileInteractor,
                                                      @Named("loadProfileInteractorRelay") resultStateBehaviorRelay: BehaviorRelay<ResultState>): ProfileDetailsPresenter =
@@ -63,7 +75,6 @@ interface MainActivityComponent : ActivityComponent<MainActivity>, MeasurementLo
         internal fun providesLastUpdatedPresenter(loadProfileInteractor: LoadProfileInteractor,
                                                   @Named("loadProfileInteractorRelay") resultStateBehaviorRelay: BehaviorRelay<ResultState>): LastUpdatedPresenter =
                 LastUpdatedPresenter(loadProfileInteractor, resultStateBehaviorRelay, LastUpdatedTextState.Factory.idle())
-
 
         /**
          * Log weight
