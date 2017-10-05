@@ -37,6 +37,7 @@ class WeightLogPresenter @Inject constructor(
                     is LoadWeightLogInteractor.State.Successful ->
                         previousState.copy(inProgress = false,
                                 loadSuccessful = true,
+                                // TODO: Add support for pagination
                                 weightLogList = resultState.weightLogList)
 //                                weightLogList = previousState.weightLogList.toMutableList()
 //                                        .apply { addAll(resultState.weightLogList) })

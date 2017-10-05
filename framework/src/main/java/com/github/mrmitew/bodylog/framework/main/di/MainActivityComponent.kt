@@ -44,8 +44,8 @@ interface MainActivityComponent : ActivityComponent<MainActivity>, MeasurementLo
 
         @Provides
         internal fun providesMeasurementLogPresenter(loadMeasurementLogInteractor: LoadMeasurementLogInteractor) =
-                MeasurementLogPresenter(loadMeasurementLogInteractor)
-
+                MeasurementLogPresenter(loadMeasurementLogInteractor = loadMeasurementLogInteractor,
+                        measurementLogResultStateRelay = BehaviorRelay.create())
         /**
          * Profile details
          */
