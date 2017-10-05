@@ -10,8 +10,8 @@ import java.util.concurrent.TimeUnit
 
 class InMemoryRepository : Repository {
     private val profileBehaviorRelay: BehaviorRelay<Profile> = BehaviorRelay.create()
-    private val weightLogBehaviorRelay: BehaviorRelay<MutableList<Log.Weight>> = BehaviorRelay.create()
-    private val measurementLogBehaviorRelay: BehaviorRelay<MutableList<Log.Measurement>> = BehaviorRelay.create()
+    private val weightLogBehaviorRelay: BehaviorRelay<List<Log.Weight>> = BehaviorRelay.create()
+    private val measurementLogBehaviorRelay: BehaviorRelay<List<Log.Measurement>> = BehaviorRelay.create()
     private var cachedProfile = Profile(name = "John Doe",
             description = "With hard work you can achieve your goals and you can become successful!")
     private val cachedWeightLogList: MutableList<Log.Weight> = arrayListOf(
