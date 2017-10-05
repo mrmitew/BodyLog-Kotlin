@@ -25,7 +25,7 @@ import java.text.SimpleDateFormat
 import java.util.*
 import javax.inject.Inject
 
-class MeasurementLogAdapter @Inject constructor(private val activity: AppCompatActivity) : RecyclerView.Adapter<MeasurementLogAdapter.ViewHolder>(), LifecycleObserver, MeasurementLogView {
+class MeasurementLogAdapter(private val activity: AppCompatActivity) : RecyclerView.Adapter<MeasurementLogAdapter.ViewHolder>(), LifecycleObserver, MeasurementLogView {
     class PresenterHolder(application: Application) : BasePresenterHolder<MeasurementLogView, MeasurementLogView.State>(application) {
         @Inject override lateinit var presenter: MeasurementLogPresenter
         override fun injectMembers(injector: PresenterHolderInjector) = injector.inject(this)
@@ -97,14 +97,9 @@ class MeasurementLogAdapter @Inject constructor(private val activity: AppCompatA
     fun injectPresenterHolder(): PresenterHolder =
             ViewModelProviders.of(activity).get(PresenterHolder::class.java)
 
-
     @OnLifecycleEvent(Lifecycle.Event.ON_START)
-    fun onAttachedToWindow() {
-        presenterHolder.onAttachedToWindow(view)
-    }
+    fun onAttachedToWindow() = presenterHolder.onAttachedToWindow(view)
 
     @OnLifecycleEvent(Lifecycle.Event.ON_STOP)
-    fun onDetachedFromWindow() {
-        presenterHolder.onDetachedFromWindow()
-    }
+    fun onDetachedFromWindow() = presenterHolder.onDetachedFromWindow()
 }

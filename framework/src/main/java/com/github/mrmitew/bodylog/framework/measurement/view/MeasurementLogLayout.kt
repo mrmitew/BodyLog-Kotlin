@@ -21,6 +21,14 @@ import kotlinx.android.synthetic.main.layout_measurement_log.view.*
 import javax.inject.Inject
 
 class MeasurementLogLayout : BasePresentableLinearLayout<MeasurementLogView, MeasurementLogView.State>, MeasurementLogView {
+    interface MeasurementLogProviderComponent {
+        fun inject(target: MeasurementLogLayout)
+    }
+
+    interface MeasurementLogInjectionProvider {
+        fun measurementLogProviderComponent(): MeasurementLogProviderComponent
+    }
+
     class PresenterHolder(application: Application) : BasePresenterHolder<MeasurementLogView, MeasurementLogView.State>(application) {
         @Inject override lateinit var presenter: MeasurementLogPresenter
         override fun injectMembers(injector: PresenterHolderInjector) = injector.inject(this)
@@ -28,8 +36,8 @@ class MeasurementLogLayout : BasePresentableLinearLayout<MeasurementLogView, Mea
 
     override val view: MeasurementLogView = this
 
-    @Inject
-    protected lateinit var adapter: MeasurementLogAdapter
+    @Suppress("ProtectedInFinal") // Because of dagger
+    @Inject protected lateinit var adapter: MeasurementLogAdapter
 
     constructor(context: Context) : super(context) {
         init()
@@ -76,13 +84,5 @@ class MeasurementLogLayout : BasePresentableLinearLayout<MeasurementLogView, Mea
             }
             rv_measurement.adapter = adapter
         }
-    }
-
-    interface MeasurementLogProviderComponent {
-        fun inject(target: MeasurementLogLayout)
-    }
-
-    interface MeasurementLogInjectionProvider {
-        fun measurementLogProviderComponent(): MeasurementLogProviderComponent
     }
 }
