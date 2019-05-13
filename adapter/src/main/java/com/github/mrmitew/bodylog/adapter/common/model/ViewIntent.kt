@@ -1,3 +1,6 @@
 package com.github.mrmitew.bodylog.adapter.common.model
 
-abstract class ViewIntent
+/**
+ * Intent from a View
+ */
+interface ViewIntent

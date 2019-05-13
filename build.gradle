@@ -1,14 +1,14 @@
 // Top-level build file where you can add configuration options common to all sub-projects/modules.
 
 buildscript {
-    ext.kotlin_version = '1.1.50'
+    ext.kotlin_version = '1.3.31'
 
     repositories {
         google()
         jcenter()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:3.0.0-beta6'
+        classpath 'com.android.tools.build:gradle:3.4.0'
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
 
         // NOTE: Do not place your application dependencies here; they belong
@@ -38,9 +38,10 @@ ext.versions = [
         kotlin              : "$kotlin_version",
 
         // UI libs
-        butterknife         : '8.5.1',
+        mpAndroidChart      : '3.0.2',
         constraintLayout    : '1.0.2',
         glide               : '4.0.0-RC0',
+        floatingActionMenu  : '1.0.0',
 
         // Reactive
         rxJava2             : '2.0.7',
@@ -87,6 +88,7 @@ ext.versions = [
         // Testing
         junit               : '4.12',
         mockito             : '2.10.0',
+        mockitoKotlin       : '1.5.0',
         supportTestRunner   : '1.0.0',
         espresso            : '3.0.0',
         compileTesting      : '0.8',
@@ -99,11 +101,12 @@ ext.versions = [
  *
  * TODO: Remove the following code when Gradle is fixed
  */
-subprojects { subproject ->
-    afterEvaluate {
-        if (subproject.plugins.hasPlugin("kotlin")) { // && subproject.plugins.hasPlugin("java-library")
-            subproject.kotlin.copyClassesToJavaOutput = true
-            subproject.jar.duplicatesStrategy = DuplicatesStrategy.EXCLUDE
-        }
-    }
-}
+//subprojects { subproject ->
+//    afterEvaluate {
+//        if (subproject.plugins.hasPlugin("kotlin")) {
+//            // && subproject.plugins.hasPlugin("java-library")
+//            subproject.kotlin.copyClassesToJavaOutput = true
+//            subproject.jar.duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+//        }
+//    }
+//}

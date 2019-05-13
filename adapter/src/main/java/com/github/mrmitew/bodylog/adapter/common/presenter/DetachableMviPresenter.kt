@@ -1,6 +1,6 @@
 package com.github.mrmitew.bodylog.adapter.common.presenter
 
-import com.github.mrmitew.bodylog.adapter.common.ViewState
+import com.github.mrmitew.bodylog.adapter.common.model.ViewState
 import com.github.mrmitew.bodylog.adapter.common.view.BaseView
 
 abstract class DetachableMviPresenter<V : BaseView<S>, S : ViewState> protected constructor(view: V) :
